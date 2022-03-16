@@ -1,18 +1,15 @@
-`jekyll_run`
-[![Gem Version](https://badge.fury.io/rb/jekyll_run.svg)](https://badge.fury.io/rb/jekyll_run)
+`jekyll_site_inspector`
+[![Gem Version](https://badge.fury.io/rb/jekyll_site_inspector.svg)](https://badge.fury.io/rb/jekyll_site_inspector)
 ===========
 
-`jekyll_run` Jekyll tag plugin that executes a program and returns the output from STDOUT. Because the output includes the command that was executed,
-and contains unselectable span tags,
-this plugin is intended to be embedded within a pre tag.
-
+`jekyll_site_inspector` is a Ruby gem that dumps lots of information from `site` if in `development` mode and `site_inspector: true` in `_config.yml`.
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'jekyll_run'
+gem 'jekyll_site_inspector'
 ```
 
 And then execute:
@@ -21,7 +18,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install jekyll_run
+    $ gem install jekyll_site_inspector
 
 
 ## Additional Information
@@ -41,17 +38,17 @@ $ BUNDLE_WITH="development" bundle install
 To build and install this gem onto your local machine, run:
 ```shell
 $ bundle exec rake install
-jekyll_run 1.0.0 built to pkg/jekyll_run-0.1.0.gem.
-jekyll_run (1.0.0) installed.
+jekyll_site_inspector 1.0.0 built to pkg/jekyll_site_inspector-0.1.0.gem.
+jekyll_site_inspector (1.0.0) installed.
 
-$ gem info jekyll_run
+$ gem info jekyll_site_inspector
 
 *** LOCAL GEMS ***
 
-jekyll_run (1.0.0)
+jekyll_site_inspector (1.0.0)
     Author: Mike Slinn
     Homepage:
-    https://github.com/mslinn/jekyll_run
+    https://github.com/mslinn/jekyll_site_inspector
     License: MIT
     Installed at: /home/mslinn/.gems
 
@@ -71,7 +68,7 @@ To release a new version,
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/mslinn/jekyll_run.
+Bug reports and pull requests are welcome on GitHub at https://github.com/mslinn/jekyll_site_inspector.
 
 
 ## License

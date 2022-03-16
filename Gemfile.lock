@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    jekyll_run (1.0.0)
+    jekyll_site_inspector (1.0.0)
 
 GEM
   remote: https://rubygems.org/
@@ -118,7 +118,7 @@ DEPENDENCIES
   bundler
   debase
   jekyll (>= 3.5)
-  jekyll_run!
+  jekyll_site_inspector!
   rake (~> 13.0)
   rspec
   rubocop (= 1.18.0)
