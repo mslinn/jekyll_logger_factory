@@ -1,16 +1,16 @@
 # frozen_string_literal: true
 
-require_relative "lib/jekyll_site_inspector/version"
+require_relative "lib/jekyll_run/version"
 
 # rubocop:disable Metrics/BlockLength, Style/StringLiterals
 Gem::Specification.new do |spec|
-  spec.name = 'jekyll_site_inspector'
+  spec.name = 'jekyll_run'
   spec.version = Jekyll::VERSION
   spec.authors = ['Mike Slinn']
   spec.email = ['mslinn@mslinn.com']
 
-  spec.summary = 'Displays Jekyll data structures passed to plugins.'
-  spec.homepage = 'https://github.com/mslinn/jekyll_site_inspector'
+  spec.summary = 'Jekyll tag plugin that executes a program and returns the output from STDOUT.'
+  spec.homepage = 'https://github.com/mslinn/jekyll_run'
   spec.license = 'MIT'
   spec.required_ruby_version = '>= 2.6.0'
 

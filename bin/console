@@ -3,7 +3,7 @@
 
 require "fileutils"
 
-gemspec_name = "jekyll_site_inspector.gemspec"
+gemspec_name = "jekyll_run.gemspec"
 lines = File.readlines(gemspec_name, :chomp => true)
 if lines.find { |line| line.match?(%r!homepage *= *"TODO!) }
   abort <<~END_ERR
