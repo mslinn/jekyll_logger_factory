@@ -1,16 +1,16 @@
 # frozen_string_literal: true
 
-require_relative "lib/jekyll_site_inspector/version"
+require_relative "lib/jekyll_logger_factory/version"
 
 # rubocop:disable Metrics/BlockLength, Style/StringLiterals
 Gem::Specification.new do |spec|
-  spec.name = 'jekyll_site_inspector'
+  spec.name = 'jekyll_logger_factory'
   spec.version = Jekyll::VERSION
   spec.authors = ['Mike Slinn']
   spec.email = ['mslinn@mslinn.com']
 
-  spec.summary = 'Displays Jekyll data structures passed to plugins.'
-  spec.homepage = 'https://github.com/mslinn/jekyll_site_inspector'
+  spec.summary = 'Generates Jekyll logger with colored output.'
+  spec.homepage = 'https://github.com/mslinn/jekyll_logger_factory'
   spec.license = 'MIT'
   spec.required_ruby_version = '>= 2.6.0'
 
