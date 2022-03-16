@@ -14,7 +14,6 @@
 .idea*
 .jekyll-cache/
 .jekyll-metadata
-.makeAwsBucketAndDistribution.log
 .sass-cache/
 .yardoc
 .yardoc/
