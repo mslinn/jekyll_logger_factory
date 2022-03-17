@@ -1,8 +1,8 @@
-`jekyll_logger_factory`
-[![Gem Version](https://badge.fury.io/rb/jekyll_logger_factory.svg)](https://badge.fury.io/rb/jekyll_logger_factory)
+`jekyll_plugin_logger`
+[![Gem Version](https://badge.fury.io/rb/jekyll_plugin_logger.svg)](https://badge.fury.io/rb/jekyll_plugin_logger)
 ===========
 
-`jekyll_logger_factory` is a Ruby gem that provides colored console logs for Jekyll plugins.
+`jekyll_plugin_logger` is a Ruby gem that provides colored console logs for Jekyll plugins.
 
 
 ## Installation
@@ -10,7 +10,7 @@
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'jekyll_logger_factory'
+gem 'jekyll_plugin_logger'
 ```
 
 And then execute:
@@ -19,28 +19,30 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install jekyll_logger_factory
+    $ gem install jekyll_plugin_logger
 
 
 ## Usage
 
 It looks within `_config.yml` for a key corresponding to the plugin progname.
-For example, if the plugin's progname has value `"abc"` then an entry called `logger_factory.abc`
+For example, if the plugin's class is called `"MyPlugin"` then an entry called `plugin_loggers.MyPlugin`
 will be read from the config file, if present.
 If the entry exists, its value overrides the value specified when created.
 If no such entry is found then the `log_level` value passed to `new` is used.
 
-For example, create a new logger using this Ruby code:
+Here are examples of how to use this plugin:
 ```ruby
-LoggerFactory.new('progname', site.config, Logger::WARN)
-LoggerFactory.new('progname', site.config)
-LoggerFactory.new('progname') # _config.yml settings are ignored
+Jekyll.logger.info("Info message 1")
+Jekyll.logger.info('MyPlugin', "Info message 2")
+Jekyll.logger.info('MyPlugin') { "Info message 3" }
+Jekyll::Log.info { "Info message 4" }
+
+Jekyll.logger.warn('MyPlugin') { "Warn message 1" }
+Jekyll::Log.warn { "Warn message 2" }
+
+Jekyll.logger.error('MyPlugin') { "Error message 1" }
+Jekyll::Log.error { "Error message 2" }
 ```
-
-Each plugin can have its own logger namespace, or logger namespaces can be shared between plugins,
-according to the value of `progname`.
-
-This logger is a subclass of [Jekyll's Stephenson Logger](https://github.com/jekyll/jekyll/blob/master/lib/jekyll/stevenson.rb), which itself is a sublass of the Ruby standard library logger.
 
 For more information about the logging feature in the Ruby standard library,
 see https://ruby-doc.org/stdlib-2.7.2/libdoc/logger/rdoc/Logger.html
@@ -53,33 +55,40 @@ More information is available on Mike Slinn's web site about
 
 ## Development
 
-After checking out the repo, run `bin/setup` to install dependencies. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+After checking out the repo, run `bin/setup` to install dependencies, including development dependencies.
 
-Install development dependencies like this:
-```
-$ BUNDLE_WITH="development" bundle install
-```
+Now you can run `bin/console` for an interactive prompt that will allow you to experiment.
 
+### Build and Install Locally
 To build and install this gem onto your local machine, run:
 ```shell
-$ bundle exec rake install
-jekyll_logger_factory 1.0.0 built to pkg/jekyll_logger_factory-0.1.0.gem.
-jekyll_logger_factory (1.0.0) installed.
+$ rake install:local
+```
 
-$ gem info jekyll_logger_factory
+The following also does the same thing:
+```shell
+$ bundle exec rake install
+jekyll_plugin_logger 1.0.0 built to pkg/jekyll_plugin_logger-0.1.0.gem.
+jekyll_plugin_logger (1.0.0) installed.
+```
+
+Examine the newly built gem:
+```shell
+$ gem info jekyll_plugin_logger
 
 *** LOCAL GEMS ***
 
-jekyll_logger_factory (1.0.0)
+jekyll_plugin_logger (1.0.0)
     Author: Mike Slinn
     Homepage:
-    https://github.com/mslinn/jekyll_logger_factory
+    https://github.com/mslinn/jekyll_plugin_logger
     License: MIT
     Installed at: /home/mslinn/.gems
 
     Generates Jekyll logger with colored output.
 ```
 
+### Build and Push to RubyGems
 To release a new version,
   1. Update the version number in `version.rb`.
   2. Commit all changes to git; if you don't the next step might fail with an unexplainable error message.
@@ -93,7 +102,7 @@ To release a new version,
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/mslinn/jekyll_logger_factory.
+Bug reports and pull requests are welcome on GitHub at https://github.com/mslinn/jekyll_plugin_logger.
 
 
 ## License

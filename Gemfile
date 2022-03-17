@@ -2,7 +2,7 @@
 
 source "https://rubygems.org"
 
-# Specify the gem's dependencies in jekyll_logger_factory.gemspec
+# Specify the gem's dependencies in jekyll_plugin_logger.gemspec
 gemspec
 
 gem 'bundler', require: false
