@@ -65,24 +65,22 @@ module Jekyll
   end
 
   # Convenience methods
-  module Log
-    def self.calling_class_name
-      caller(2..2).first.split(%r!/|[[:punct:]]+!).last
-    end
+  def self.calling_class_name
+    caller(2..2).first.split(%r!/|[[:punct:]]+!).last
+  end
 
-    def Log.info(progname = nil, &block)
-      progname = calling_class_name if progname.nil?
-      Jekyll.logger.info(progname) { yield block }
-    end
+  def self.info(progname = nil, &block)
+    progname = calling_class_name if progname.nil?
+    Jekyll.logger.info(progname) { yield block }
+  end
 
-    def Log.warn(progname = nil, &block)
-      progname = calling_class_name if progname.nil?
-      Jekyll.logger.warn(progname) { yield block }
-    end
+  def self.warn(progname = nil, &block)
+    progname = calling_class_name if progname.nil?
+    Jekyll.logger.warn(progname) { yield block }
+  end
 
-    def Log.error(progname = nil, &block)
-      progname = calling_class_name if progname.nil?
-      Jekyll.logger.error(progname) { yield block }
-    end
+  def self.error(progname = nil, &block)
+    progname = calling_class_name if progname.nil?
+    Jekyll.logger.error(progname) { yield block }
   end
 end

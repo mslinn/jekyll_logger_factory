@@ -32,16 +32,20 @@ If no such entry is found then the `log_level` value passed to `new` is used.
 
 Here are examples of how to use this plugin:
 ```ruby
+# These log messages are always computed, needed or not:
 Jekyll.logger.info("Info message 1")
 Jekyll.logger.info('MyPlugin', "Info message 2")
+
+# The following blocks are not evaluated unless log_level requires them to be
+
 Jekyll.logger.info('MyPlugin') { "Info message 3" }
-Jekyll::Log.info { "Info message 4" }
+Jekyll.info { "Info message 4" }
 
 Jekyll.logger.warn('MyPlugin') { "Warn message 1" }
-Jekyll::Log.warn { "Warn message 2" }
+Jekyll.warn { "Warn message 2" }
 
 Jekyll.logger.error('MyPlugin') { "Error message 1" }
-Jekyll::Log.error { "Error message 2" }
+Jekyll.error { "Error message 2" }
 ```
 
 For more information about the logging feature in the Ruby standard library,
