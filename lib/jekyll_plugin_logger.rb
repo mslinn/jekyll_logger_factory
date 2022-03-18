@@ -82,3 +82,5 @@ module Jekyll
     Jekyll.logger.error(progname) { yield block }
   end
 end
+
+Jekyll.info "Loaded jekyll_logger plugin."
