@@ -19,8 +19,6 @@ require "yaml"
 # For more information about the logging feature in the Ruby standard library,
 # @see https://ruby-doc.org/stdlib-2.7.2/libdoc/logger/rdoc/Logger.html
 
-require "jekyll"
-
 module Jekyll
   # Monkeypatch the Jekyll logger so :info messages are colored cyan
   class Stevenson < ::Logger
