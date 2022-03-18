@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require_relative "jekyll_plugin_logger/version"
 require "jekyll"
 require "yaml"
+require_relative "jekyll_plugin_logger/version"
 
 # Looks within _config.yml for a key corresponding to the plugin progname.
 # For example, if the plugin's progname has value "abc" then an entry called logger_factory.abc

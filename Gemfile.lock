@@ -2,6 +2,7 @@ PATH
   remote: .
   specs:
     jekyll_plugin_logger (2.0.0)
+      jekyll
 
 GEM
   remote: https://rubygems.org/
@@ -128,4 +129,4 @@ DEPENDENCIES
   ruby-debug-ide
 
 BUNDLED WITH
-   2.3.7
+   2.3.8
