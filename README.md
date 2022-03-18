@@ -2,24 +2,7 @@
 [![Gem Version](https://badge.fury.io/rb/jekyll_plugin_logger.svg)](https://badge.fury.io/rb/jekyll_plugin_logger)
 ===========
 
-`jekyll_plugin_logger` is a Ruby gem that provides colored console logs for Jekyll plugins.
-
-
-## Installation
-
-Add this line to your application's Gemfile:
-
-```ruby
-gem 'jekyll_plugin_logger'
-```
-
-And then execute:
-
-    $ bundle install
-
-Or install it yourself as:
-
-    $ gem install jekyll_plugin_logger
+`jekyll_plugin_logger` is a Jekyll plugin, packaged as a Ruby gem, that provides colored console logs for Jekyll plugins.
 
 
 ## Usage
@@ -52,6 +35,26 @@ For more information about the logging feature in the Ruby standard library,
 see https://ruby-doc.org/stdlib-2.7.2/libdoc/logger/rdoc/Logger.html
 
 
+
+## Installation
+
+Add this line to your Jekyll website's `_config.yml`:
+
+```ruby
+group :jekyll_plugins do
+  gem 'jekyll_plugin_logger'
+end
+```
+
+Install all of the dependent gems of your Jekyll website by typing:
+
+    $ bundle install
+
+Or install just this one gem by typing:
+
+    $ gem install jekyll_plugin_logger
+
+
 ## Additional Information
 More information is available on Mike Slinn's web site about
 [Jekyll plugins](https://www.mslinn.com/blog/index.html#Jekyll).
@@ -61,7 +64,7 @@ More information is available on Mike Slinn's web site about
 
 After checking out the repo, run `bin/setup` to install dependencies, including development dependencies.
 
-Now you can run `bin/console` for an interactive prompt that will allow you to experiment.
+You can also run `bin/console` for an interactive prompt that will allow you to experiment.
 
 ### Build and Install Locally
 To build and install this gem onto your local machine, run:
