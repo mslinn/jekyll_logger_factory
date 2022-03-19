@@ -21,12 +21,12 @@ require_relative "jekyll_plugin_logger/version"
 
 module Jekyll
   # Monkeypatch the Jekyll logger so :info messages are colored cyan
-  class Stevenson < ::Logger
-    # Log an +INFO+ message, with color
-    def info(progname = nil, &block)
-      add(INFO, nil, progname.cyan, &block)
-    end
-  end
+  # class Stevenson < ::Logger
+  #   # Log an +INFO+ message, with color
+  #   def info(progname = nil, &block)
+  #     add(INFO, nil, progname.cyan, &block)
+  #   end
+  # end
 
   # Monkey patch LogAdapter.initialize so loglevel can be set from _config.yml
   class LogAdapter
@@ -79,9 +79,9 @@ module Jekyll
   def self.info(progname = nil, &block)
     if block
       progname = calling_class_name if progname.nil?
-      Jekyll.logger.info(progname) { yield block }
+      Jekyll.logger.info(progname) { (yield block).to_s.cyan }
     else
-      Jekyll.logger.info(calling_class_name) { progname }
+      Jekyll.logger.info(calling_class_name) { progname.cyan }
     end
   end
 
@@ -102,6 +102,6 @@ module Jekyll
       Jekyll.logger.error(calling_class_name) { progname }
     end
   end
-end
 
-Jekyll.info { "Loaded jekyll_plugin_logger plugin." }
+  info { "Loaded jekyll_plugin_logger plugin." }
+end
