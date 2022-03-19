@@ -95,4 +95,4 @@ module Jekyll
   end
 end
 
-Jekyll.info "Loaded jekyll_logger plugin."
+Jekyll.info "Loaded jekyll_plugin_logger plugin."
