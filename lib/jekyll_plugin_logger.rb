@@ -67,6 +67,15 @@ module Jekyll
     caller(2..2).first.split(%r!/|[[:punct:]]+!).last
   end
 
+  def self.debug(progname = nil, &block)
+    if block
+      progname = calling_class_name if progname.nil?
+      Jekyll.logger.debug(progname) { yield block }
+    else
+      Jekyll.logger.debug(calling_class_name) { progname }
+    end
+  end
+
   def self.info(progname = nil, &block)
     if block
       progname = calling_class_name if progname.nil?
