@@ -68,18 +68,30 @@ module Jekyll
   end
 
   def self.info(progname = nil, &block)
-    progname = calling_class_name if progname.nil?
-    Jekyll.logger.info(progname) { yield block }
+    if block
+      progname = calling_class_name if progname.nil?
+      Jekyll.logger.info(progname) { yield block }
+    else
+      Jekyll.logger.info(calling_class_name) { progname }
+    end
   end
 
   def self.warn(progname = nil, &block)
-    progname = calling_class_name if progname.nil?
-    Jekyll.logger.warn(progname) { yield block }
+    if block
+      progname = calling_class_name if progname.nil?
+      Jekyll.logger.warn(progname) { yield block }
+    else
+      Jekyll.logger.warn(calling_class_name) { progname }
+    end
   end
 
   def self.error(progname = nil, &block)
-    progname = calling_class_name if progname.nil?
-    Jekyll.logger.error(progname) { yield block }
+    if block
+      progname = calling_class_name if progname.nil?
+      Jekyll.logger.error(progname) { yield block }
+    else
+      Jekyll.logger.error(calling_class_name) { progname }
+    end
   end
 end
 
