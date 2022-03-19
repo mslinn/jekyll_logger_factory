@@ -70,9 +70,9 @@ module Jekyll
   def self.debug(progname = nil, &block)
     if block
       progname = calling_class_name if progname.nil?
-      Jekyll.logger.debug(progname) { yield block }
+      Jekyll.logger.debug(progname) { (yield block).to_s.orange }
     else
-      Jekyll.logger.debug(calling_class_name) { progname }
+      Jekyll.logger.debug(calling_class_name) { progname.orange }
     end
   end
 
@@ -104,4 +104,4 @@ module Jekyll
   end
 end
 
-Jekyll.info "Loaded jekyll_plugin_logger plugin."
+Jekyll.info { "Loaded jekyll_plugin_logger plugin." }
