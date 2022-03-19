@@ -39,7 +39,6 @@ Gem::Specification.new do |spec|
   END_MESSAGE
 
   spec.add_dependency "jekyll", ">= 3.5.0"
-  spec.add_dependency "jekyll_plugin_logger"
 
   spec.add_development_dependency "bundler"
   spec.add_development_dependency "debase"
