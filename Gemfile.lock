@@ -2,7 +2,7 @@ PATH
   remote: .
   specs:
     jekyll_plugin_logger (2.0.0)
-      jekyll
+      jekyll (>= 3.5.0)
 
 GEM
   remote: https://rubygems.org/
@@ -118,9 +118,8 @@ PLATFORMS
 DEPENDENCIES
   bundler
   debase
-  jekyll (>= 3.5)
   jekyll_plugin_logger!
-  rake (~> 13.0)
+  rake
   rspec
   rubocop (= 1.18.0)
   rubocop-jekyll
@@ -129,4 +128,4 @@ DEPENDENCIES
   ruby-debug-ide
 
 BUNDLED WITH
-   2.3.8
+   2.3.7
