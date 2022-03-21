@@ -2,6 +2,7 @@
 
 require "jekyll"
 require "yaml"
+require_relative "jekyll_plugin_logger/version"
 
 # Looks within _config.yml for a key corresponding to the plugin progname.
 # For example, if the plugin's progname has value "abc" then an entry called logger_factory.abc
@@ -101,6 +102,5 @@ module Jekyll
       Jekyll.logger.error(calling_class_name) { progname }
     end
   end
-
-  info { "Loaded jekyll_plugin_logger plugin." }
 end
+Jekyll.info { "Loaded jekyll_plugin_logger v#{JekyllPluginLogger::VERSION} plugin." }
