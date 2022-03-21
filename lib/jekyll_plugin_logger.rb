@@ -4,6 +4,10 @@ require "jekyll"
 require "yaml"
 require_relative "jekyll_plugin_logger/version"
 
+module JekyllPluginLoggerName
+  PLUGIN_NAME = "jekyll_plugin_logger"
+end
+
 # Looks within _config.yml for a key corresponding to the plugin progname.
 # For example, if the plugin's progname has value "abc" then an entry called logger_factory.abc
 # will be read from the config file, if present.
@@ -103,4 +107,4 @@ module Jekyll
     end
   end
 end
-Jekyll.info { "Loaded jekyll_plugin_logger v#{JekyllPluginLogger::VERSION} plugin." }
+Jekyll.info { "Loaded #{JekyllPluginLoggerName::PLUGIN_NAME} v#{JekyllPluginLogger::VERSION} plugin." }
