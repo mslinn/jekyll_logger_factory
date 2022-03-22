@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "jekyll"
+# require "jekyll"
 require "logger"
 require "singleton"
 require "yaml"
@@ -8,32 +8,6 @@ require_relative "jekyll_plugin_logger/version"
 
 module JekyllPluginLoggerName
   PLUGIN_NAME = "jekyll_plugin_logger"
-end
-
-module JekyllPluginLogger
-  def calling_class_name
-    call_stack = caller
-    calling_class = call_stack.find { |item| item.include? "<class:" }
-    return nil unless calling_class
-
-    calling_class.split(%r!/|[[:punct:]]+!).last
-  end
-
-  # @param config [YAML] Configuration data that might contain a entry for `logger_factory`
-  # @param progname [String] The name of the `config` subentry to look for underneath the `logger_factory` entry
-  # @return [String, FalseClass]
-  def yaml_log_level(yaml_str, klass_name = calling_class_name)
-    return nil if yaml_str.nil? || yaml_str.strip.empty?
-
-    config = YAML.safe_load(yaml_str)
-    log_config = config["plugin_loggers"]
-    return nil if log_config.nil?
-
-    progname_log_level = log_config[klass_name]
-    return nil if progname_log_level.nil?
-
-    progname_log_level
-  end
 end
 
 # Looks within _config.yml for a key corresponding to the plugin progname.
@@ -66,11 +40,36 @@ class PluginLogger
   #     abc: debug
   def initialize(log_level = :info, stream_name = $stdout, yaml_str = nil, class_name = nil) # rubocop:disable Metrics/ParameterLists
     @logger = Logger.new(stream_name)
-    @logger.progname = class_name || calling_class_name # Could be nil, which is fine
-    @logger.level = yaml_log_level(yaml_str, @logger.progname) || log_level
+    @logger.progname = class_name || PluginLogger.calling_class_name # Could be nil, which is fine
+    @logger.level = PluginLogger.yaml_log_level(yaml_str, @logger.progname) || log_level
     @logger.formatter = proc { |severity, _, prog_name, msg|
       "#{severity} #{prog_name}: #{msg}\n"
     }
+  end
+
+  def self.calling_class_name
+    call_stack = caller
+    calling_class = call_stack.find { |item| item.include? "<class:" }
+    return nil unless calling_class
+
+    calling_class.split(%r!/|[[:punct:]]+!).last
+  end
+
+  # @param config [YAML] Configuration data that might contain a entry for `logger_factory`
+  # @param progname [String] The name of the `config` subentry to look for underneath the `logger_factory` entry
+  # @return [String, FalseClass]
+  def self.yaml_log_level(yaml_str, klass_name = PluginLogger.calling_class_name)
+    return nil if yaml_str.nil? || yaml_str.strip.empty?
+
+    config = YAML.safe_load(yaml_str)
+    log_config = config["plugin_loggers"]
+    return nil if log_config.nil?
+
+    progname_log_level = log_config[klass_name]
+    puts "progname_log_level=#{progname_log_level}"
+    return nil if progname_log_level.nil? || progname_log_level.strip.empty?
+
+    progname_log_level
   end
 
   def level_as_sym
@@ -81,23 +80,24 @@ class PluginLogger
 
   def debug(progname = nil, &block)
     if block
-      progname = calling_class_name if progname.nil?
+      progname = PluginLogger.calling_class_name if progname.nil?
       @logger.debug(progname) { (yield block).to_s.magenta }
     else
-      @logger.debug(calling_class_name) { progname.magenta }
+      @logger.debug(PluginLogger.calling_class_name) { progname.magenta }
     end
   end
 
   def info(progname = nil, &block)
     if block
-      progname = calling_class_name if progname.nil?
+      progname = PluginLogger.calling_class_name if progname.nil?
       @logger.info(progname) { (yield block).to_s.cyan }
     else
-      @logger.info(calling_class_name) { progname.cyan }
+      @logger.info(PluginLogger.calling_class_name) { progname.cyan }
     end
   end
 
   def level=(value)
+    puts "Setting log level to #{value}"
     @logger.level = value
   end
 
@@ -115,19 +115,19 @@ class PluginLogger
 
   def warn(progname = nil, &block)
     if block
-      progname = calling_class_name if progname.nil?
+      progname = PluginLogger.calling_class_name if progname.nil?
       @logger.warn(progname) { (yield block).to_s.yellow }
     else
-      @logger.warn(calling_class_name) { progname.yellow }
+      @logger.warn(PluginLogger.calling_class_name) { progname.yellow }
     end
   end
 
   def error(progname = nil, &block)
     if block
-      progname = calling_class_name if progname.nil?
+      progname = PluginLogger.calling_class_name if progname.nil?
       @logger.error(progname) { (yield block).to_s.red }
     else
-      @logger.error(calling_class_name) { progname.red }
+      @logger.error(PluginLogger.calling_class_name) { progname.red }
     end
   end
 end
@@ -143,9 +143,10 @@ end
 
 instance = PluginMetaLogger.instance
 instance.level = if caller.find { |item| item.include? "gems/rspec-core" }
-                   :debug
+                   "debug"
                  else
-                   yaml_log_level(File.read("_config.yml"), PluginMetaLogger.instance.progname)
+                   x = PluginLogger.yaml_log_level(File.read("_config.yml"), PluginMetaLogger.instance.progname)
+                   x.nil? || x.empty? ? :info : x
                  end
 instance.info { "Loaded #{JekyllPluginLoggerName::PLUGIN_NAME} v#{JekyllPluginLogger::VERSION} plugin." }
 instance.debug { "Logger for #{instance.progname} created at level #{instance.level_as_sym}" }

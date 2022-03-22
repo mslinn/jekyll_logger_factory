@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
-require "jekyll"
+require "colorator"
+# require "jekyll"
 require_relative "../lib/jekyll_plugin_logger"
 
 # Output should be:
@@ -48,7 +49,7 @@ class MyTestPlugin
     logger.error { "Error message 4" }
   end
 
-  RSpec.describe(JekyllPluginLogger) do
+  RSpec.describe JekyllPluginLogger do
     it "outputs at debug level" do
       MyTestPlugin.exercise(PluginLogger.new(:debug, $stdout, yaml))
     end
