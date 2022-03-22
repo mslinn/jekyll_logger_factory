@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 require "jekyll"
+require "logger"
+require "singleton"
 require "yaml"
 require_relative "jekyll_plugin_logger/version"
 
@@ -8,103 +10,142 @@ module JekyllPluginLoggerName
   PLUGIN_NAME = "jekyll_plugin_logger"
 end
 
+module JekyllPluginLogger
+  def calling_class_name
+    call_stack = caller
+    calling_class = call_stack.find { |item| item.include? "<class:" }
+    return nil unless calling_class
+
+    calling_class.split(%r!/|[[:punct:]]+!).last
+  end
+
+  # @param config [YAML] Configuration data that might contain a entry for `logger_factory`
+  # @param progname [String] The name of the `config` subentry to look for underneath the `logger_factory` entry
+  # @return [String, FalseClass]
+  def yaml_log_level(yaml_str, klass_name = calling_class_name)
+    return nil if yaml_str.nil? || yaml_str.strip.empty?
+
+    config = YAML.safe_load(yaml_str)
+    log_config = config["plugin_loggers"]
+    return nil if log_config.nil?
+
+    progname_log_level = log_config[klass_name]
+    return nil if progname_log_level.nil?
+
+    progname_log_level
+  end
+end
+
 # Looks within _config.yml for a key corresponding to the plugin progname.
 # For example, if the plugin's progname has value "abc" then an entry called logger_factory.abc
 # will be read from the config file, if present.
 # If the entry exists, its value overrides the value specified when create_logger() was called.
 # If no such entry is found then the log_level value specified when create_logger() was called is used.
-# In the absence of any configuration, log_level defaults to :info.
 #
-# @example  If your plugin is defined in a class called `MyPluginClass` then the YAML to override the
-# programmatically set `log_level` to `debug` is:
-#   plugin_loggers:
-#     MyPluginClass: debug
+# @example Create a new logger using this code like this:
+#   LoggerFactory.new.create_logger('my_tag_name', site.config, Logger::WARN, $stderr)
 #
 # For more information about the logging feature in the Ruby standard library,
-# @see https://ruby-doc.org/stdlib-2.7.2/libdoc/logger/rdoc/Logger.html
-
-module Jekyll
-  # Monkeypatch the Jekyll logger so :info messages are colored cyan
-  # class Stevenson < ::Logger
-  #   # Log an +INFO+ message, with color
-  #   def info(progname = nil, &block)
-  #     add(INFO, nil, progname.cyan, &block)
-  #   end
-  # end
-
-  # Monkey patch LogAdapter.initialize so loglevel can be set from _config.yml
-  class LogAdapter
-    # Public: Create a new instance of a log writer
-    #
-    # writer - Logger compatible instance
-    # log_level - (optional, symbol) the log level
-    #
-    # Returns nothing
-    def initialize(writer, level = :info)
-      @messages = []
-      @writer = writer
-      self.log_level = yaml_log_level || level
-    end
-
-    private
-
-    # @param config [YAML] Configuration data that might contain a entry for `logger_factory`
-    # @param progname [String] The name of the `config` subentry to look for underneath the `logger_factory` entry
-    # @return [String, FalseClass]
-    def yaml_log_level
-      yaml_str = File.read("_config.yml")
-      return false if yaml_str.nil? || yaml_str.strip.empty?
-
-      config = YAML.safe_load(yaml_str)
-      log_config = config["plugin_loggers"]
-      return false if log_config.nil?
-
-      progname_log_level = log_config[Log.calling_class_name]
-      return false if progname_log_level.nil?
-
-      ENV["JEKYLL_LOG_LEVEL"] = progname_log_level
-    end
+# @see https://ruby-doc.org/stdlib-2.7.1/libdoc/logger/rdoc/Logger.html
+#
+# Available colors are: :black, :red, :green, :yellow, :blue, :magenta, :cyan, :white, and the modifier :bold
+class PluginLogger
+  include JekyllPluginLogger
+  # @param log_level [String, Symbol, Integer] can be specified as $stderr or $stdout,
+  #   or an integer from 0..3 (inclusive),
+  #   or as a case-insensitive string
+  #   (`debug`, `info`, `warn`, `error`, or `DEBUG`, `INFO`, `WARN`, `ERROR`),
+  #   or as a symbol (`:debug`, `:info`, `:warn`, `:error` ).
+  #
+  # @param config [YAML] is normally created by reading a YAML file such as Jekyll's `_config.yml`.
+  #   When invoking from a Jekyll plugin, provide `site.config`,
+  #   which is available from all types of Jekyll plugins as `Jekyll.configuration({})`.
+  #
+  # @example  If `progname` has value `abc`, then the YAML to override the programmatically set log_level to `debug` is:
+  #   logger_factory:
+  #     abc: debug
+  def initialize(log_level = :info, stream_name = $stdout, yaml_str = nil, class_name = nil) # rubocop:disable Metrics/ParameterLists
+    @logger = Logger.new(stream_name)
+    @logger.progname = class_name || calling_class_name # Could be nil, which is fine
+    @logger.level = yaml_log_level(yaml_str, @logger.progname) || log_level
+    @logger.formatter = proc { |severity, _, prog_name, msg|
+      "#{severity} #{prog_name}: #{msg}\n"
+    }
   end
 
-  # Convenience methods
-  def self.calling_class_name
-    caller(2..2).first.split(%r!/|[[:punct:]]+!).last
+  def level_as_sym
+    return :unknown if @logger.level.negative? || level > 4
+
+    [:debug, :info, :warn, :error, :fatal, :unknown][@logger.level]
   end
 
-  def self.debug(progname = nil, &block)
+  def debug(progname = nil, &block)
     if block
       progname = calling_class_name if progname.nil?
-      Jekyll.logger.debug(progname) { (yield block).to_s.orange }
+      @logger.debug(progname) { (yield block).to_s.magenta }
     else
-      Jekyll.logger.debug(calling_class_name) { progname.orange }
+      @logger.debug(calling_class_name) { progname.magenta }
     end
   end
 
-  def self.info(progname = nil, &block)
+  def info(progname = nil, &block)
     if block
       progname = calling_class_name if progname.nil?
-      Jekyll.logger.info(progname) { (yield block).to_s.cyan }
+      @logger.info(progname) { (yield block).to_s.cyan }
     else
-      Jekyll.logger.info(calling_class_name) { progname.cyan }
+      @logger.info(calling_class_name) { progname.cyan }
     end
   end
 
-  def self.warn(progname = nil, &block)
+  def level=(value)
+    @logger.level = value
+  end
+
+  def level
+    @logger.level
+  end
+
+  def progname=(value)
+    @logger.progname = value
+  end
+
+  def progname
+    @logger.progname
+  end
+
+  def warn(progname = nil, &block)
     if block
       progname = calling_class_name if progname.nil?
-      Jekyll.logger.warn(progname) { yield block }
+      @logger.warn(progname) { (yield block).to_s.yellow }
     else
-      Jekyll.logger.warn(calling_class_name) { progname }
+      @logger.warn(calling_class_name) { progname.yellow }
     end
   end
 
-  def self.error(progname = nil, &block)
+  def error(progname = nil, &block)
     if block
       progname = calling_class_name if progname.nil?
-      Jekyll.logger.error(progname) { yield block }
+      @logger.error(progname) { (yield block).to_s.red }
     else
-      Jekyll.logger.error(calling_class_name) { progname }
+      @logger.error(calling_class_name) { progname.red }
     end
   end
 end
-Jekyll.info { "Loaded #{JekyllPluginLoggerName::PLUGIN_NAME} v#{JekyllPluginLogger::VERSION} plugin." }
+
+class PluginMetaLogger < PluginLogger
+  include Singleton
+
+  def initialize(log_level = :info, stream_name = $stdout, yaml_str = nil, class_name = nil) # rubocop:disable Metrics/ParameterLists
+    super
+    @logger.progname = "PluginMetaLogger"
+  end
+end
+
+instance = PluginMetaLogger.instance
+instance.level = if caller.find { |item| item.include? "gems/rspec-core" }
+                   :debug
+                 else
+                   yaml_log_level(File.read("_config.yml"), PluginMetaLogger.instance.progname)
+                 end
+instance.info { "Loaded #{JekyllPluginLoggerName::PLUGIN_NAME} v#{JekyllPluginLogger::VERSION} plugin." }
+instance.debug { "Logger for #{instance.progname} created at level #{instance.level_as_sym}" }
