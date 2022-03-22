@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "colorator"
 # require "jekyll"
 require "logger"
 require "singleton"
