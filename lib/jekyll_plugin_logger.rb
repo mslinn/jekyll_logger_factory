@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "colorator"
-# require "jekyll"
 require "logger"
 require "singleton"
 require "yaml"
@@ -67,7 +66,6 @@ class PluginLogger
     return nil if log_config.nil?
 
     progname_log_level = log_config[klass_name]
-    puts "progname_log_level=#{progname_log_level}"
     return nil if progname_log_level.nil? || progname_log_level.strip.empty?
 
     progname_log_level
@@ -98,7 +96,6 @@ class PluginLogger
   end
 
   def level=(value)
-    puts "Setting log level to #{value}"
     @logger.level = value
   end
 
