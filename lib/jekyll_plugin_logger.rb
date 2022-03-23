@@ -82,7 +82,7 @@ class PluginLogger
       progname = PluginLogger.calling_class_name if progname.nil?
       @logger.debug(progname) { (yield block).to_s.magenta }
     else
-      @logger.debug(PluginLogger.calling_class_name) { progname.magenta }
+      @logger.debug(PluginLogger.calling_class_name) { progname.to_s.magenta }
     end
   end
 
@@ -91,7 +91,7 @@ class PluginLogger
       progname = PluginLogger.calling_class_name if progname.nil?
       @logger.info(progname) { (yield block).to_s.cyan }
     else
-      @logger.info(PluginLogger.calling_class_name) { progname.cyan }
+      @logger.info(PluginLogger.calling_class_name) { progname.to_s.cyan }
     end
   end
 
@@ -116,7 +116,7 @@ class PluginLogger
       progname = PluginLogger.calling_class_name if progname.nil?
       @logger.warn(progname) { (yield block).to_s.yellow }
     else
-      @logger.warn(PluginLogger.calling_class_name) { progname.yellow }
+      @logger.warn(PluginLogger.calling_class_name) { progname.to_s.yellow }
     end
   end
 
@@ -125,7 +125,7 @@ class PluginLogger
       progname = PluginLogger.calling_class_name if progname.nil?
       @logger.error(progname) { (yield block).to_s.red }
     else
-      @logger.error(PluginLogger.calling_class_name) { progname.red }
+      @logger.error(PluginLogger.calling_class_name) { progname.to_s.red }
     end
   end
 end
