@@ -20,6 +20,5 @@ bin/build
 
 set -e
 
-bundle exec rake install:local
 cd "$1" > /dev/null || exit 1
 _bin/debug
