@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "colorator"
+require "jekyll_plugin_logger"
 require "logger"
 require "singleton"
 require "yaml"
