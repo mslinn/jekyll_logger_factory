@@ -62,8 +62,7 @@ class PluginLogger
   # @param progname [String] The name of the `config` subentry to look for underneath the `logger_factory` entry
   # @return [String, FalseClass]
   def self.yaml_log_level(yaml_str, klass_name)
-    return nil if yaml_str.nil? || yaml_str.strip.empty?
-
+    yaml_str = File.read("_config.yml") if yaml_str.nil? || yaml_str.strip.empty?
     config = YAML.safe_load(yaml_str)
     log_config = config["plugin_loggers"]
     return nil if log_config.nil?
@@ -149,7 +148,6 @@ unless ENV["jekyll_plugin_logger_created_already"]
   instance.level = if caller.find { |item| item.include? "gems/rspec-core" }
                      "debug"
                    else
-                     yaml_str = File.read("_config.yml")
                      x = PluginLogger.yaml_log_level(yaml_str, PluginMetaLogger.instance.progname)
                      x.nil? || x.empty? ? :info : x
                    end
