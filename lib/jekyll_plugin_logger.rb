@@ -142,7 +142,7 @@ class PluginMetaLogger < PluginLogger
 end
 
 unless ENV["jekyll_plugin_logger_created_already"]
-  ENV["jekyll_plugin_logger_created_already"] = true
+  ENV["jekyll_plugin_logger_created_already"] = "true"
   instance = PluginMetaLogger.instance
   instance.level = if caller.find { |item| item.include? "gems/rspec-core" }
                      "debug"
