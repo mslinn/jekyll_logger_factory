@@ -148,7 +148,7 @@ unless ENV["jekyll_plugin_logger_created_already"]
   instance.level = if caller.find { |item| item.include? "gems/rspec-core" }
                      "debug"
                    else
-                     x = PluginLogger.yaml_log_level(yaml_str, PluginMetaLogger.instance.progname)
+                     x = PluginLogger.yaml_log_level(nil, PluginMetaLogger.instance.progname)
                      x.nil? || x.empty? ? :info : x
                    end
   instance.info { "Loaded #{JekyllPluginLoggerName::PLUGIN_NAME} v#{JekyllPluginLogger::VERSION} plugin." }
