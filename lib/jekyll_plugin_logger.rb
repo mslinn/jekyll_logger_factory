@@ -113,7 +113,7 @@ end
 class PluginMetaLogger < PluginLogger
   include Singleton
 
-  def initialize(config, stream_name = $stdout)
+  def setup(config, stream_name = $stdout)
     super(self, config, stream_name)
     @config = config
   end
@@ -124,7 +124,8 @@ class PluginMetaLogger < PluginLogger
 end
 
 Jekyll::Hooks.register(:site, :after_init, :priority => :high) do |site|
-  instance = PluginMetaLogger.instance(site.config)
+  instance = PluginMetaLogger.instance
+  instance.setup(site.config)
   instance.info { "Loaded #{JekyllPluginLoggerName::PLUGIN_NAME} v#{JekyllPluginLogger::VERSION} plugin." }
   instance.debug { "Logger for #{instance.progname} created at level #{instance.level_as_sym}" }
 end
