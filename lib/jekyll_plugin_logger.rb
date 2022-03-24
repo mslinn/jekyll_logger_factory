@@ -49,7 +49,7 @@ class PluginLogger
 
   def self.calling_class_name
     call_stack = caller
-    puts "call_stack[0..3]=#{call_stack[0..3]}"
+    puts "\n\ncall_stack[0..10]=#{call_stack[0..10].join("\n")}"
     calling_class = call_stack.find { |item| item.include? "<class:" }
     return nil unless calling_class
 
