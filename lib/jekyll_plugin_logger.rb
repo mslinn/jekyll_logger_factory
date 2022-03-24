@@ -142,15 +142,9 @@ class PluginMetaLogger < PluginLogger
   end
 end
 
-unless ENV["jekyll_plugin_logger_created_already"]
-  ENV["jekyll_plugin_logger_created_already"] = "true"
+Jekyll::Hooks.register :after_init do |site|
   instance = PluginMetaLogger.instance
-  instance.level = if caller.find { |item| item.include? "gems/rspec-core" }
-                     "debug"
-                   else
-                     x = PluginLogger.yaml_log_level(nil, PluginMetaLogger.instance.progname)
-                     x.nil? || x.empty? ? :info : x
-                   end
+  instance.level = PluginLogger.yaml_log_level(site.config, PluginMetaLogger.instance.progname) || :info
   instance.info { "Loaded #{JekyllPluginLoggerName::PLUGIN_NAME} v#{JekyllPluginLogger::VERSION} plugin." }
   instance.debug { "Logger for #{instance.progname} created at level #{instance.level_as_sym}" }
 end
