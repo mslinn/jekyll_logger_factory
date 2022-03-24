@@ -70,7 +70,7 @@ class PluginLogger
     progname_log_level = log_config[klass_name]
     return nil if progname_log_level.nil? || progname_log_level.strip.empty?
 
-    PluginMetaLogger.instance.info { "#{klass_name} log level set to #{progname_log_level} by _config.yml entry." }
+    puts "#{klass_name} log level set to #{progname_log_level} by _config.yml entry.".cyan
 
     progname_log_level
   end
