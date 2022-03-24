@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "colorator"
-# require "jekyll"
+require "jekyll"
 require_relative "../lib/jekyll_plugin_logger"
 
 # Output should be:
