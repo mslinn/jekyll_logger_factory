@@ -145,7 +145,8 @@ instance = PluginMetaLogger.instance
 instance.level = if caller.find { |item| item.include? "gems/rspec-core" }
                    "debug"
                  else
-                   x = PluginLogger.yaml_log_level(File.read("_config.yml"), PluginMetaLogger.instance.progname)
+                   yaml_str = File.read("_config.yml")
+                   x = PluginLogger.yaml_log_level(yaml_str, PluginMetaLogger.instance.progname)
                    x.nil? || x.empty? ? :info : x
                  end
 instance.info { "Loaded #{JekyllPluginLoggerName::PLUGIN_NAME} v#{JekyllPluginLogger::VERSION} plugin." }
