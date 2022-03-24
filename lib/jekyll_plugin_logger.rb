@@ -52,6 +52,7 @@ class PluginLogger
     calling_class = call_stack.find { |item| item.include? "<class:" }
     return nil unless calling_class
 
+    puts "calling_class=#{calling_class}"
     calling_class.split(%r!/|[[:punct:]]+!).last
   end
 
