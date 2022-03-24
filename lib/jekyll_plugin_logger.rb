@@ -38,41 +38,16 @@ class PluginLogger
   # @example  If `progname` has value `abc`, then the YAML to override the programmatically set log_level to `debug` is:
   #   logger_factory:
   #     abc: debug
-  def initialize(klass, log_level = :info, stream_name = $stdout, yaml_str = nil)
+  def initialize(klass, config, stream_name = $stdout)
     @logger = Logger.new(stream_name)
     @logger.progname = klass.class.name.split("::").last
-    @logger.level = PluginLogger.yaml_log_level(yaml_str, @logger.progname) || log_level
+    @logger.level = :info
+    plugin_loggers = config["plugin_loggers"]
+    @logger.level ||= plugin_loggers["PluginMetaLogger"] if plugin_loggers
     # puts "PluginLogger.initialize: @logger.progname=#{@logger.progname} set to #{@logger.level}".red
     @logger.formatter = proc { |severity, _, prog_name, msg|
       "#{severity} #{prog_name}: #{msg}\n"
     }
-  end
-
-  def self.calling_class_name
-    call_stack = caller
-    # puts "\n\ncall_stack[0..10]=\n  #{call_stack[0..10].join("\n  ")}"
-    calling_class = call_stack.find { |item| item.include? "<class:" }
-    return nil unless calling_class
-
-    # puts "calling_class=#{calling_class}"
-    calling_class.split(%r!/|[[:punct:]]+!).last
-  end
-
-  # @param config [YAML] Configuration data that might contain a entry for `logger_factory`
-  # @param progname [String] The name of the `config` subentry to look for underneath the `logger_factory` entry
-  # @return [String, FalseClass]
-  def self.yaml_log_level(yaml_str, klass_name)
-    yaml_str = File.read("_config.yml") if yaml_str.nil? || yaml_str.strip.empty?
-    config = YAML.safe_load(yaml_str)
-    log_config = config["plugin_loggers"]
-    return nil if log_config.nil?
-
-    progname_log_level = log_config[klass_name]
-    return nil if progname_log_level.nil? || progname_log_level.strip.empty?
-
-    puts "#{klass_name} log level set to #{progname_log_level} by _config.yml entry.".cyan
-
-    progname_log_level
   end
 
   def level_as_sym
@@ -137,14 +112,17 @@ end
 class PluginMetaLogger < PluginLogger
   include Singleton
 
-  def initialize(log_level = :info, stream_name = $stdout, yaml_str = nil)
-    super(self, log_level, stream_name, yaml_str)
+  def initialize(config, stream_name = $stdout)
+    super(self, config, stream_name)
+  end
+
+  def new_logger(klass, config, stream_name = $stdout)
+    PluginLogger.new(klass, config, stream_name)
   end
 end
 
-Jekyll::Hooks.register(:site, :after_init) do |site|
-  instance = PluginMetaLogger.instance
-  instance.level = PluginLogger.yaml_log_level(site.config, PluginMetaLogger.instance.progname) || :info
+Jekyll::Hooks.register(:site, :after_init, :priority => :high) do |site|
+  instance = PluginMetaLogger.instance(site.config)
   instance.info { "Loaded #{JekyllPluginLoggerName::PLUGIN_NAME} v#{JekyllPluginLogger::VERSION} plugin." }
   instance.debug { "Logger for #{instance.progname} created at level #{instance.level_as_sym}" }
 end
