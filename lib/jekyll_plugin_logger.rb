@@ -41,6 +41,7 @@ class PluginLogger
   def initialize(klass, log_level = :info, stream_name = $stdout, yaml_str = nil)
     @logger = Logger.new(stream_name)
     @logger.progname = klass.class.name.split("::").last
+    puts "PluginLogger.initialize: @logger.progname=#{@logger.progname}"
     @logger.level = PluginLogger.yaml_log_level(yaml_str, @logger.progname) || log_level
     @logger.formatter = proc { |severity, _, prog_name, msg|
       "#{severity} #{prog_name}: #{msg}\n"
