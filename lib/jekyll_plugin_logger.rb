@@ -141,17 +141,16 @@ class PluginMetaLogger < PluginLogger
   end
 end
 
-# rubocop:disable Style/GlobalVars
-unless $instance
-  $instance = PluginMetaLogger.instance
-  $instance.level = if caller.find { |item| item.include? "gems/rspec-core" }
-                      "debug"
-                    else
-                      yaml_str = File.read("_config.yml")
-                      x = PluginLogger.yaml_log_level(yaml_str, PluginMetaLogger.instance.progname)
-                      x.nil? || x.empty? ? :info : x
-                    end
-  $instance.info { "Loaded #{JekyllPluginLoggerName::PLUGIN_NAME} v#{JekyllPluginLogger::VERSION} plugin." }
-  $instance.debug { "Logger for #{instance.progname} created at level #{instance.level_as_sym}" }
+unless ENV["jekyll_plugin_logger_created_already"]
+  ENV["jekyll_plugin_logger_created_already"] = true
+  instance = PluginMetaLogger.instance
+  instance.level = if caller.find { |item| item.include? "gems/rspec-core" }
+                     "debug"
+                   else
+                     yaml_str = File.read("_config.yml")
+                     x = PluginLogger.yaml_log_level(yaml_str, PluginMetaLogger.instance.progname)
+                     x.nil? || x.empty? ? :info : x
+                   end
+  instance.info { "Loaded #{JekyllPluginLoggerName::PLUGIN_NAME} v#{JekyllPluginLogger::VERSION} plugin." }
+  instance.debug { "Logger for #{instance.progname} created at level #{instance.level_as_sym}" }
 end
-# rubocop:enable Style/GlobalVars
