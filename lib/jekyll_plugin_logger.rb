@@ -142,7 +142,7 @@ class PluginMetaLogger < PluginLogger
   end
 end
 
-Jekyll::Hooks.register :after_init do |site|
+Jekyll::Hooks.register(:site, :after_init) do |site|
   instance = PluginMetaLogger.instance
   instance.level = PluginLogger.yaml_log_level(site.config, PluginMetaLogger.instance.progname) || :info
   instance.info { "Loaded #{JekyllPluginLoggerName::PLUGIN_NAME} v#{JekyllPluginLogger::VERSION} plugin." }
