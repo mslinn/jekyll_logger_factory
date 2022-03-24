@@ -38,9 +38,9 @@ class PluginLogger
   # @example  If `progname` has value `abc`, then the YAML to override the programmatically set log_level to `debug` is:
   #   logger_factory:
   #     abc: debug
-  def initialize(log_level = :info, stream_name = $stdout, yaml_str = nil, class_name = nil) # rubocop:disable Metrics/ParameterLists
+  def initialize(klass, log_level = :info, stream_name = $stdout, yaml_str = nil)
     @logger = Logger.new(stream_name)
-    @logger.progname = class_name || PluginLogger.calling_class_name # Could be nil, which is fine
+    @logger.progname = klass.class.name.split("::").last
     @logger.level = PluginLogger.yaml_log_level(yaml_str, @logger.progname) || log_level
     @logger.formatter = proc { |severity, _, prog_name, msg|
       "#{severity} #{prog_name}: #{msg}\n"
@@ -49,18 +49,18 @@ class PluginLogger
 
   def self.calling_class_name
     call_stack = caller
-    puts "\n\ncall_stack[0..10]=#{call_stack[0..10].join("\n")}"
+    # puts "\n\ncall_stack[0..10]=\n  #{call_stack[0..10].join("\n  ")}"
     calling_class = call_stack.find { |item| item.include? "<class:" }
     return nil unless calling_class
 
-    puts "calling_class=#{calling_class}"
+    # puts "calling_class=#{calling_class}"
     calling_class.split(%r!/|[[:punct:]]+!).last
   end
 
   # @param config [YAML] Configuration data that might contain a entry for `logger_factory`
   # @param progname [String] The name of the `config` subentry to look for underneath the `logger_factory` entry
   # @return [String, FalseClass]
-  def self.yaml_log_level(yaml_str, klass_name = PluginLogger.calling_class_name)
+  def self.yaml_log_level(yaml_str, klass_name)
     return nil if yaml_str.nil? || yaml_str.strip.empty?
 
     config = YAML.safe_load(yaml_str)
@@ -137,9 +137,8 @@ end
 class PluginMetaLogger < PluginLogger
   include Singleton
 
-  def initialize(log_level = :info, stream_name = $stdout, yaml_str = nil, class_name = nil) # rubocop:disable Metrics/ParameterLists
-    super
-    @logger.progname = "PluginMetaLogger"
+  def initialize(log_level = :info, stream_name = $stdout, yaml_str = nil)
+    super(self, log_level, stream_name, yaml_str)
   end
 end
 

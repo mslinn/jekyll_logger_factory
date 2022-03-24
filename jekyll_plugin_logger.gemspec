@@ -54,9 +54,9 @@ Gem::Specification.new do |spec|
   spec.add_dependency "jekyll", ">= 3.5.0"
 
   spec.add_development_dependency "debase"
-  spec.add_development_dependency "rubocop-jekyll"
-  spec.add_development_dependency "rubocop-rake"
-  spec.add_development_dependency "rubocop-rspec"
+  # spec.add_development_dependency "rubocop-jekyll"
+  # spec.add_development_dependency "rubocop-rake"
+  # spec.add_development_dependency "rubocop-rspec"
   spec.add_development_dependency "ruby-debug-ide"
 end
 # rubocop:enable Metrics/BlockLength
