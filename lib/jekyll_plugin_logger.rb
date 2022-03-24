@@ -109,13 +109,13 @@ class PluginLogger
   end
 end
 
-class PluginMetaLogger < PluginLogger
+class PluginMetaLogger
   include Singleton
   attr_reader :logger
 
   def setup(config, stream_name = $stdout)
     @config = config
-    @logger = new_logger(self, config, stream_name)
+    @logger = new_logger(self, stream_name)
     @logger
   end
 

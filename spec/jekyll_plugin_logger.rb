@@ -17,6 +17,8 @@ require_relative "../lib/jekyll_plugin_logger"
 # MyTestPlugin: Error message 2 (red)
 
 class MyTestPlugin
+  _instance = PluginMetaLogger.instance
+
   yaml = <<~END_YAML
     plugin_loggers:
       PluginLogger: debug
