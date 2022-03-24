@@ -114,10 +114,11 @@ class PluginMetaLogger < PluginLogger
 
   def initialize(config, stream_name = $stdout)
     super(self, config, stream_name)
+    @config = config
   end
 
-  def new_logger(klass, config, stream_name = $stdout)
-    PluginLogger.new(klass, config, stream_name)
+  def new_logger(klass, stream_name = $stdout)
+    PluginLogger.new(klass, @config, stream_name)
   end
 end
 
