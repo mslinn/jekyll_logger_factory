@@ -123,7 +123,7 @@ end
 #
 #   # In `config.yml`:
 #   plugin_loggers:
-#     PluginMetaLogger: info # Sets meta-logger log level
+#     PluginMetaLogger: info
 #     MyPlugin: warn
 #     MakeArchive: error
 #     ArchiveDisplayTag: debug
