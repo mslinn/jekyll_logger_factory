@@ -33,7 +33,7 @@ class MyTestPlugin
 
   _yaml = <<~END_YAML
     plugin_loggers:
-      PluginLogger: debug
+      PluginMetaLogger: debug
       SiteInspector: warn
       MakeArchive: error
       ArchiveDisplayTag: debug

@@ -10,16 +10,23 @@ module JekyllPluginLoggerName
   PLUGIN_NAME = "jekyll_plugin_logger"
 end
 
-# Once the meta-logger is made (see PluginMetaLogger) new instances of PluginLogger can be created with log levels set by config entries.
-# @example Create a new logger using this code like this:
-#   PluginMetaLogger.instance.new_logger(self)
+# Once the meta-logger is made (see `PluginMetaLogger``, below) new instances of `PluginLogger` can be created with log levels set by `config` entries.
+# @example Create new `PluginLogger`s like this:
+#   @logger = PluginMetaLogger.instance.new_logger(self)
 #
 # self can be a class, a string, or a symbol.
+#
+# Best practice is to invoke `info``, `warn, `debug`` and `error`` methods by passing blocks that contain the message.
+# The blocks will only be evaluated if output for that level is enabled.
+# @example Use `PluginLogger`s like this:
+#   @logger.info { "This is only evaluated if info level debugging is enabled" }
 #
 # For more information about the logging feature in the Ruby standard library,
 # @see https://ruby-doc.org/stdlib-2.7.1/libdoc/logger/rdoc/Logger.html
 class PluginLogger
   include JekyllPluginLogger
+
+  # This method should only be called by PluginMetaLogger
   # @param log_level [String, Symbol, Integer] can be specified as $stderr or $stdout,
   #   or an integer from 0..3 (inclusive),
   #   or as a case-insensitive string
@@ -101,15 +108,31 @@ class PluginLogger
   end
 end
 
-# Makes a meta logger instance (a singleton) with level set by site.config
-# Saves site.config for later use when creating plugin loggers.
-# For example, if the plugin's progname has value "abc" then an entry called logger_factory.abc
-# will be read from the config file, if present.
-# If the entry exists, its value overrides the value specified when create_logger() was called.
-# If no such entry is found then the log_level value specified when create_logger() was called is used.
+# Makes a meta-logger instance (a singleton) with level set by `site.config`.
+# Saves `site.config` for later use when creating plugin loggers; these loggers each have their own log levels.
+#
+# For example, if the plugin's progname has value `MyPlugin` then an entry called `plugin_loggers.MyPlugin`
+# will be read from `config`, if present.
+# If no such entry is found then the meta-logger log_level is set to `:info`.
+# If you want to see messages that indicate the loggers and log levels as they are created,
+# set the log level for `PluginMetaLogger` to `debug` in `_config.yml`
+#
 # @example
-#   logger = PluginMetaLogger.instance.setup(site.config)
-#   logger.debug { "3 fleas fleeing freedom" }
+#   # Create and initialize the meta-logger singleton in a high priority Jekyll `site` `:after_init` hook:
+#   PluginMetaLogger.instance.setup(site.config).info { "Meta-logger has been created" }
+#
+#   # In `config.yml`:
+#   plugin_loggers:
+#     PluginMetaLogger: info # Sets meta-logger log level
+#     MyPlugin: warn
+#     MakeArchive: error
+#     ArchiveDisplayTag: debug
+#
+#   # In a Jekyll plugin:
+#   @logger = PluginMetaLogger.instance.new_logger(self)
+#   @logger.info { "This is a log message from a Jekyll plugin" }
+#   #
+#   PluginMetaLogger.instance.info { "MyPlugin vX.Y.Z has been loaded" }
 class PluginMetaLogger
   include Singleton
   attr_reader :logger
