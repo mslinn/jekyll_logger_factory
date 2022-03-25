@@ -10,19 +10,14 @@ module JekyllPluginLoggerName
   PLUGIN_NAME = "jekyll_plugin_logger"
 end
 
-# Looks within _config.yml for a key corresponding to the plugin progname.
-# For example, if the plugin's progname has value "abc" then an entry called logger_factory.abc
-# will be read from the config file, if present.
-# If the entry exists, its value overrides the value specified when create_logger() was called.
-# If no such entry is found then the log_level value specified when create_logger() was called is used.
-#
+# Once the meta-logger is made (see PluginMetaLogger) new instances of PluginLogger can be created with log levels set by config entries.
 # @example Create a new logger using this code like this:
-#   LoggerFactory.new.create_logger('my_tag_name', site.config, Logger::WARN, $stderr)
+#   PluginMetaLogger.instance.new_logger(self)
+#
+# self can be a class, a string, or a symbol.
 #
 # For more information about the logging feature in the Ruby standard library,
 # @see https://ruby-doc.org/stdlib-2.7.1/libdoc/logger/rdoc/Logger.html
-#
-# Available colors are: :black, :red, :green, :yellow, :blue, :magenta, :cyan, :white, and the modifier :bold
 class PluginLogger
   include JekyllPluginLogger
   # @param log_level [String, Symbol, Integer] can be specified as $stderr or $stdout,
@@ -50,6 +45,7 @@ class PluginLogger
     }
   end
 
+  # Available colors are: :black, :red, :green, :yellow, :blue, :magenta, :cyan, :white, and the modifier :bold
   def level_as_sym
     return :unknown if @logger.level.negative? || level > 4
 
@@ -105,6 +101,15 @@ class PluginLogger
   end
 end
 
+# Makes a meta logger instance (a singleton) with level set by site.config
+# Saves site.config for later use when creating plugin loggers.
+# For example, if the plugin's progname has value "abc" then an entry called logger_factory.abc
+# will be read from the config file, if present.
+# If the entry exists, its value overrides the value specified when create_logger() was called.
+# If no such entry is found then the log_level value specified when create_logger() was called is used.
+# @example
+#   logger = PluginMetaLogger.instance.setup(site.config)
+#   logger.debug { "3 fleas fleeing freedom" }
 class PluginMetaLogger
   include Singleton
   attr_reader :logger
