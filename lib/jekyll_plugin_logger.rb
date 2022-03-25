@@ -40,7 +40,7 @@ class PluginLogger
   #     abc: debug
   def initialize(klass, config, stream_name = $stdout)
     @logger = Logger.new(stream_name)
-    @logger.progname = klass.class.name.split("::").last
+    @logger.progname = (klass.instance_of?(Class) ? klass : klass.class).name.split("::").last
     @logger.level = :info
     plugin_loggers = config["plugin_loggers"]
     @logger.level ||= plugin_loggers["PluginMetaLogger"] if plugin_loggers
@@ -112,6 +112,12 @@ end
 class PluginMetaLogger
   include Singleton
   attr_reader :logger
+
+  def initialize
+    super
+    @config = {}
+    @logger = new_logger(self, $stdin)
+  end
 
   def setup(config, stream_name = $stdout)
     @config = config
