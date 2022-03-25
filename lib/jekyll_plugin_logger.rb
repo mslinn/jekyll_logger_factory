@@ -183,8 +183,6 @@ class PluginMetaLogger
   end
 
   def setup(config, stream_name = $stdout)
-    puts "PluginMetaLogger.setup: $stdout = #{$stdout}"
-    puts "PluginMetaLogger.setup: stream_name = #{stream_name}"
     @config = config
     @logger = new_logger(:PluginMetaLogger, stream_name)
     @logger
