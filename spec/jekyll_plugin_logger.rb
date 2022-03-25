@@ -18,14 +18,20 @@ require_relative "../lib/jekyll_plugin_logger"
 
 class MyTestPlugin
   instance = PluginMetaLogger.instance
+  logger = instance.new_logger(self) # Should generate a warning
   instance.setup({})
-  logger = instance.new_logger(self)
+  PluginMetaLogger.instance.info { "How now, brown cow" }
+  PluginMetaLogger.instance.debug { "How now, brown cow" }
+  PluginMetaLogger.instance.warn { "How now, brown cow" }
+  PluginMetaLogger.instance.error { "How now, brown cow" }
+
+  logger = PluginMetaLogger.instance.new_logger(self)
   logger.debug { "3 fleas fleeing freedom" }
   logger.info { "3 fleas fleeing freedom" }
   logger.warn { "3 fleas fleeing freedom" }
   logger.error { "3 fleas fleeing freedom" }
 
-  yaml = <<~END_YAML
+  _yaml = <<~END_YAML
     plugin_loggers:
       PluginLogger: debug
       SiteInspector: warn
@@ -59,16 +65,16 @@ class MyTestPlugin
 
   RSpec.describe JekyllPluginLogger do
     it "outputs at debug level" do
-      MyTestPlugin.exercise(PluginLogger.new(:debug, $stdout, yaml))
+      MyTestPlugin.exercise(PluginMetaLogger.instance.new_logger(self, $stdout))
     end
 
     it "uses config warn" do
-      logger = PluginLogger.new(:info, $stdout, yaml, "SiteInspector")
+      logger = PluginMetaLogger.instance.new_logger("SiteInspector", $stdout)
       MyTestPlugin.exercise(logger)
     end
 
     it "uses config error" do
-      logger = PluginLogger.new(:info, $stdout, yaml, "MakeArchive")
+      logger = PluginMetaLogger.instance.new_logger(:MakeArchive)
       MyTestPlugin.exercise(logger)
     end
   end

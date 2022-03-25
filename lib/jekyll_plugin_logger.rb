@@ -40,7 +40,7 @@ class PluginLogger
   #     abc: debug
   def initialize(klass, config, stream_name = $stdout)
     @logger = Logger.new(stream_name)
-    @logger.progname = (klass.instance_of?(Class) ? klass : klass.class).name.split("::").last
+    @logger.progname = (klass.is_a?(Class) ? klass.name : klass.to_s).split("::").last
     @logger.level = :info
     plugin_loggers = config["plugin_loggers"]
     @logger.level ||= plugin_loggers["PluginMetaLogger"] if plugin_loggers
@@ -111,8 +111,33 @@ class PluginMetaLogger
 
   def initialize
     super
-    @config = {}
+    @config = nil
     @logger = new_logger(self, $stdin)
+  end
+
+  def info
+    @logger.info(self) { yield }
+  end
+
+  def debug
+    @logger.debug(self) { yield }
+  end
+
+  def warn
+    @logger.warn(self) { yield }
+  end
+
+  def error
+    @logger.error(self) { yield }
+  end
+
+  def new_logger(klass, stream_name = $stdout)
+    if @config.nil?
+      puts { "Error: PluginMetaLogger has not been initialized by calling setup yet.".red }
+      PluginLogger.new(klass, {}, stream_name)
+    else
+      PluginLogger.new(klass, @config, stream_name)
+    end
   end
 
   def setup(config, stream_name = $stdout)
@@ -120,15 +145,11 @@ class PluginMetaLogger
     @logger = new_logger(self, stream_name)
     @logger
   end
-
-  def new_logger(klass, stream_name = $stdout)
-    PluginLogger.new(klass, @config, stream_name)
-  end
 end
 
 Jekyll::Hooks.register(:site, :after_init, :priority => :high) do |site|
   instance = PluginMetaLogger.instance
   logger = instance.setup(site.config)
-  logger.info { "Loaded #{JekyllPluginLoggerName::PLUGIN_NAME} v#{JekyllPluginLogger::VERSION} plugin." }
+  logger.warn { "Loaded #{JekyllPluginLoggerName::PLUGIN_NAME} v#{JekyllPluginLogger::VERSION} plugin." }
   logger.debug { "Logger for #{instance.progname} created at level #{instance.level_as_sym}" }
 end
