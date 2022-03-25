@@ -58,19 +58,17 @@ class PluginLogger
 
   def debug(progname = nil, &block)
     if block
-      progname = PluginLogger.calling_class_name if progname.nil?
-      @logger.debug(progname) { (yield block).to_s.magenta }
+      @logger.debug(@logger.progname) { (yield block).to_s.magenta }
     else
-      @logger.debug(PluginLogger.calling_class_name) { progname.to_s.magenta }
+      @logger.debug(@logger.progname) { progname.to_s.magenta }
     end
   end
 
   def info(progname = nil, &block)
     if block
-      progname = PluginLogger.calling_class_name if progname.nil?
-      @logger.info(progname) { (yield block).to_s.cyan }
+      @logger.info(@logger.progname) { (yield block).to_s.cyan }
     else
-      @logger.info(PluginLogger.calling_class_name) { progname.to_s.cyan }
+      @logger.info(@logger.progname) { progname.to_s.cyan }
     end
   end
 
@@ -92,19 +90,17 @@ class PluginLogger
 
   def warn(progname = nil, &block)
     if block
-      progname = PluginLogger.calling_class_name if progname.nil?
-      @logger.warn(progname) { (yield block).to_s.yellow }
+      @logger.warn(@logger.progname) { (yield block).to_s.yellow }
     else
-      @logger.warn(PluginLogger.calling_class_name) { progname.to_s.yellow }
+      @logger.warn(@logger.progname) { progname.to_s.yellow }
     end
   end
 
   def error(progname = nil, &block)
     if block
-      progname = PluginLogger.calling_class_name if progname.nil?
-      @logger.error(progname) { (yield block).to_s.red }
+      @logger.error(@logger.progname) { (yield block).to_s.red }
     else
-      @logger.error(PluginLogger.calling_class_name) { progname.to_s.red }
+      @logger.error(@logger.progname) { progname.to_s.red }
     end
   end
 end

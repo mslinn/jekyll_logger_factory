@@ -19,7 +19,11 @@ require_relative "../lib/jekyll_plugin_logger"
 class MyTestPlugin
   instance = PluginMetaLogger.instance
   instance.setup({})
-  _logger = instance.new_logger(self)
+  logger = instance.new_logger(self)
+  logger.debug { "3 fleas fleeing freedom" }
+  logger.info { "3 fleas fleeing freedom" }
+  logger.warn { "3 fleas fleeing freedom" }
+  logger.error { "3 fleas fleeing freedom" }
 
   yaml = <<~END_YAML
     plugin_loggers:
