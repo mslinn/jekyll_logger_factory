@@ -184,7 +184,7 @@ class PluginMetaLogger
 
   def setup(config, stream_name = $stdout)
     @config = config
-    @logger = new_logger(:PluginMetaLogger, stream_name)
+    @logger = new_logger(self, stream_name)
     @logger
   end
 end
