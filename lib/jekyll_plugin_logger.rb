@@ -42,7 +42,7 @@ class PluginLogger
   #     abc: debug
   def initialize(klass, config, stream_name = $stdout)
     @logger = Logger.new(stream_name)
-    @logger.progname = (klass.is_a?(Class) ? klass.name : klass.to_s).split("::").last
+    @logger.progname = derive_progname(klass)
     @logger.level = :info
     plugin_loggers = config["plugin_loggers"]
     @logger.level ||= plugin_loggers["PluginMetaLogger"] if plugin_loggers
@@ -50,13 +50,6 @@ class PluginLogger
     @logger.formatter = proc { |severity, _, prog_name, msg|
       "#{severity} #{prog_name}: #{msg}\n"
     }
-  end
-
-  # Available colors are: :black, :red, :green, :yellow, :blue, :magenta, :cyan, :white, and the modifier :bold
-  def level_as_sym
-    return :unknown if @logger.level.negative? || level > 4
-
-    [:debug, :info, :warn, :error, :fatal, :unknown][@logger.level]
   end
 
   def debug(progname = nil, &block)
@@ -106,6 +99,27 @@ class PluginLogger
       @logger.error(@logger.progname) { progname.to_s.red }
     end
   end
+
+  private
+
+  def derive_progname(klass)
+    full_name = case klass.class
+                when String
+                  klass
+                when Symbol
+                  klass.to_s
+                else
+                  klass.class.name
+                end
+    full_name.split("::").last
+  end
+
+  # Available colors are: :black, :red, :green, :yellow, :blue, :magenta, :cyan, :white, and the modifier :bold
+  def level_as_sym
+    return :unknown if @logger.level.negative? || level > 4
+
+    [:debug, :info, :warn, :error, :fatal, :unknown][@logger.level]
+  end
 end
 
 # Makes a meta-logger instance (a singleton) with level set by `site.config`.
@@ -140,7 +154,7 @@ class PluginMetaLogger
   def initialize
     super
     @config = nil
-    @logger = new_logger(self, $stdin)
+    @logger = new_logger(self)
   end
 
   def info
@@ -169,8 +183,10 @@ class PluginMetaLogger
   end
 
   def setup(config, stream_name = $stdout)
+    puts "PluginMetaLogger.setup: $stdout = #{$stdout}"
+    puts "PluginMetaLogger.setup: stream_name = #{stream_name}"
     @config = config
-    @logger = new_logger(self, stream_name)
+    @logger = new_logger(:PluginMetaLogger, stream_name)
     @logger
   end
 end
