@@ -16,7 +16,5 @@ Bump.changelog = true
 # Open the changelog in an editor when bumping
 Bump.changelog = :editor
 
-# tag_prefix = ""
-
 RSpec::Core::RakeTask.new(:spec)
 task :default => :spec
