@@ -16,7 +16,7 @@ Bump.changelog = true
 # Open the changelog in an editor when bumping
 Bump.changelog = :editor
 
-# Configure bumpt to not use a prefix:
+# Configure bump to not use a prefix:
 ENV["TAG_PREFIX"] = ""
 
 RSpec::Core::RakeTask.new(:spec)
