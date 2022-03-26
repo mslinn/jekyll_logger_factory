@@ -4,9 +4,6 @@ require "bump/tasks"
 require "bundler/gem_tasks"
 require "rspec/core/rake_task"
 
-RSpec::Core::RakeTask.new(:spec)
-task :default => :spec
-
 # do not always tag the version
 # Bump.tag_by_default = false
 
@@ -18,3 +15,8 @@ Bump.changelog = true
 
 # Open the changelog in an editor when bumping
 Bump.changelog = :editor
+
+# tag_prefix = ""
+
+RSpec::Core::RakeTask.new(:spec)
+task :default => :spec
