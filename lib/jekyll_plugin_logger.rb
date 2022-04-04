@@ -189,7 +189,7 @@ class PluginMetaLogger
   end
 end
 
-Jekyll::Hooks.register(:site, :after_init, :priority => :high) do |site|
+Jekyll::Hooks.register(:site, :after_reset, :priority => :high) do |site|
   instance = PluginMetaLogger.instance
   logger = instance.setup(site.config)
   logger.info { "Loaded #{JekyllPluginLoggerName::PLUGIN_NAME} v#{JekyllPluginLogger::VERSION} plugin." }
