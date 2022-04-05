@@ -1,5 +1,6 @@
-## 2.0.1 / 2022-04-04
+## 2.0.1 / 2022-04-05
   * Changed to registration hook to `:site`, `:after_reset` because that is the first hook that gets called.
+  * Improved the detection of various types of `progname`
 
 ## 2.0.0 / 2022-03-16
   * Completely rewrote this plugin, now not a class, but a module that monkey patches the existing Jekyll logger for compatibility.

@@ -103,15 +103,15 @@ class PluginLogger
   private
 
   def derive_progname(klass)
-    full_name = case klass.class
-                when String
-                  klass
-                when Symbol
-                  klass.to_s
-                else
-                  klass.class.name
-                end
-    full_name.split("::").last
+    class_name = klass.class.to_s
+    case class_name
+    when "Class"
+      klass.class.name.demodulize
+    when "Module", "Symbol", "String"
+      klass.to_s
+    else
+      class_name
+    end
   end
 
   # Available colors are: :black, :red, :green, :yellow, :blue, :magenta, :cyan, :white, and the modifier :bold
