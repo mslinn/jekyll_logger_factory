@@ -191,7 +191,7 @@ end
 
 Jekyll::Hooks.register(:site, :after_reset, :priority => :high) do |site|
   instance = PluginMetaLogger.instance
-  logger = instance.new_logger(site.config, PluginMetaLogger)
+  logger = instance.new_logger(PluginMetaLogger, site.config)
   logger.info { "Loaded #{JekyllPluginLoggerName::PLUGIN_NAME} v#{JekyllPluginLoggerVersion::VERSION} plugin." }
   logger.debug { "Logger for #{instance.progname} created at level #{instance.level_as_sym}" }
 end
