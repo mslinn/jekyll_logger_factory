@@ -41,12 +41,12 @@ class PluginLogger
   # @example  If `progname` has value `abc`, then the YAML to override the programmatically set log_level to `debug` is:
   #   logger_factory:
   #     abc: debug
-  def initialize(klass, config, stream_name = $stdout)
+  def initialize(klass, config = nil, stream_name = $stdout)
     @config = config
     @logger = Logger.new(stream_name)
     @logger.progname = derive_progname(klass)
     @logger.level = :info
-    plugin_loggers = config["plugin_loggers"]
+    plugin_loggers = config ? config["plugin_loggers"] : nil
     @logger.level = plugin_loggers[@logger.progname] if plugin_loggers && plugin_loggers[@logger.progname]
     # puts "PluginLogger.initialize: @logger.progname=#{@logger.progname} set to #{@logger.level}".red
     @logger.formatter = proc { |severity, _, prog_name, msg|
