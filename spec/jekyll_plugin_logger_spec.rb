@@ -54,7 +54,7 @@ class MyTestPlugin
     logger.error { "Error message 4" }
   end
 
-  RSpec.describe JekyllPluginLogger do
+  RSpec.describe PluginLogger do
     it "outputs at info level" do
       MyTestPlugin.exercise(PluginMetaLogger.instance.new_logger(self, PluginMetaLogger.instance.config, $stdout))
       expect(PluginMetaLogger.instance.level_as_sym).to eq(:info)

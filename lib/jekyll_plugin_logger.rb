@@ -25,8 +25,6 @@ end
 # For more information about the logging feature in the Ruby standard library,
 # @see https://ruby-doc.org/stdlib-2.7.1/libdoc/logger/rdoc/Logger.html
 class PluginLogger
-  include JekyllPluginLogger
-
   # This method should only be called by PluginMetaLogger
   # @param log_level [String, Symbol, Integer] can be specified as $stderr or $stdout,
   #   or an integer from 0..3 (inclusive),
@@ -194,6 +192,6 @@ end
 Jekyll::Hooks.register(:site, :after_reset, :priority => :high) do |site|
   instance = PluginMetaLogger.instance
   logger = instance.new_logger(site.config, PluginMetaLogger)
-  logger.info { "Loaded #{JekyllPluginLoggerName::PLUGIN_NAME} v#{JekyllPluginLogger::VERSION} plugin." }
+  logger.info { "Loaded #{JekyllPluginLoggerName::PLUGIN_NAME} v#{JekyllPluginLoggerVersion::VERSION} plugin." }
   logger.debug { "Logger for #{instance.progname} created at level #{instance.level_as_sym}" }
 end
