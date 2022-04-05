@@ -1,3 +1,6 @@
+## 2.1.0 / 2022-04-05
+  * Changed how config info is made available
+
 ## 2.0.1 / 2022-04-05
   * Changed to registration hook to `:site`, `:after_reset` because that is the first hook that gets called.
   * Improved the detection of various types of `progname`

@@ -55,17 +55,32 @@ class MyTestPlugin
   end
 
   RSpec.describe JekyllPluginLogger do
-    it "outputs at debug level" do
+    it "outputs at info level" do
       MyTestPlugin.exercise(PluginMetaLogger.instance.new_logger(self, PluginMetaLogger.instance.config, $stdout))
+      expect(PluginMetaLogger.instance.level_as_sym).to eq(:info)
+    end
+
+    it "uses config debug" do
+      logger = PluginMetaLogger.instance.new_logger(:MyBlock, PluginMetaLogger.instance.config)
+      expect(logger.level_as_sym).to eq(:debug)
+      MyTestPlugin.exercise(logger)
+    end
+
+    it "uses config info" do
+      logger = PluginMetaLogger.instance.new_logger(:ArchiveDisplayTag, PluginMetaLogger.instance.config)
+      expect(logger.level_as_sym).to eq(:info)
+      MyTestPlugin.exercise(logger)
     end
 
     it "uses config warn" do
       logger = PluginMetaLogger.instance.new_logger("SiteInspector", PluginMetaLogger.instance.config, $stdout)
+      expect(logger.level_as_sym).to eq(:warn)
       MyTestPlugin.exercise(logger)
     end
 
     it "uses config error" do
-      logger = PluginMetaLogger.instance.new_logger(:MakeArchive, PluginMetaLogger.instance.config)
+      logger = PluginMetaLogger.instance.new_logger(:PreTagBlock, PluginMetaLogger.instance.config)
+      expect(logger.level_as_sym).to eq(:error)
       MyTestPlugin.exercise(logger)
     end
   end

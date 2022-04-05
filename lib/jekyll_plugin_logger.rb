@@ -17,7 +17,7 @@ end
 #
 # self can be a module, a class, a string, or a symbol.
 #
-# Best practice is to invoke `info``, `warn, `debug`` and `error`` methods by passing blocks that contain the message.
+# Best practice is to invoke `info`, `warn, `debug` and `error` methods by passing blocks that contain the message.
 # The blocks will only be evaluated if output for that level is enabled.
 # @example Use `PluginLogger`s like this:
 #   @logger.info { "This is only evaluated if info level debugging is enabled" }
@@ -47,7 +47,7 @@ class PluginLogger
     @logger.progname = derive_progname(klass)
     @logger.level = :info
     plugin_loggers = config["plugin_loggers"]
-    @logger.level ||= plugin_loggers[@logger.progname] if plugin_loggers
+    @logger.level = plugin_loggers[@logger.progname] if plugin_loggers && plugin_loggers[@logger.progname]
     # puts "PluginLogger.initialize: @logger.progname=#{@logger.progname} set to #{@logger.level}".red
     @logger.formatter = proc { |severity, _, prog_name, msg|
       "#{severity} #{prog_name}: #{msg}\n"
@@ -102,25 +102,25 @@ class PluginLogger
     end
   end
 
+  # Available colors are: :black, :red, :green, :yellow, :blue, :magenta, :cyan, :white, and the modifier :bold
+  def level_as_sym
+    return :unknown if @logger.level.negative? || level > 4
+
+    [:debug, :info, :warn, :error, :fatal, :unknown][@logger.level]
+  end
+
   private
 
   def derive_progname(klass)
     class_name = klass.class.to_s
     case class_name
     when "Class"
-      klass.class.name.split("::").last
+      klass.to_s.split("::").last # class_name.name.split("::").last
     when "Module", "Symbol", "String"
-      klass.to_s
+      klass.to_s.split("::").last
     else
       class_name
     end
-  end
-
-  # Available colors are: :black, :red, :green, :yellow, :blue, :magenta, :cyan, :white, and the modifier :bold
-  def level_as_sym
-    return :unknown if @logger.level.negative? || level > 4
-
-    [:debug, :info, :warn, :error, :fatal, :unknown][@logger.level]
   end
 end
 
@@ -166,6 +166,10 @@ class PluginMetaLogger
 
   def debug
     @logger.debug(self) { yield }
+  end
+
+  def level_as_sym
+    @logger.level_as_sym
   end
 
   def warn

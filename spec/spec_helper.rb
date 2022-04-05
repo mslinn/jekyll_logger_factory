@@ -13,7 +13,7 @@ RSpec.configure do |config|
       MakeArchive: info
       MyBlock: debug
       PluginMetaLogger: info
-      PreTagBlock: info
+      PreTagBlock: error
       SiteInspector: warn
       UnselectableTag: info
   END_CONFIG
