@@ -10,11 +10,12 @@ module JekyllPluginLoggerName
   PLUGIN_NAME = "jekyll_plugin_logger"
 end
 
-# Once the meta-logger is made (see `PluginMetaLogger``, below) new instances of `PluginLogger` can be created with log levels set by `config` entries.
+# Once the meta-logger is made (see `PluginMetaLogger`, below) new instances of `PluginLogger` can be created with log levels set
+# by `config` entries.
 # @example Create new `PluginLogger`s like this:
-#   @logger = PluginMetaLogger.instance.new_logger(self)
+#   @logger = PluginMetaLogger.instance.new_logger(self, PluginMetaLogger.instance.config)
 #
-# self can be a class, a string, or a symbol.
+# self can be a module, a class, a string, or a symbol.
 #
 # Best practice is to invoke `info``, `warn, `debug`` and `error`` methods by passing blocks that contain the message.
 # The blocks will only be evaluated if output for that level is enabled.
@@ -41,11 +42,12 @@ class PluginLogger
   #   logger_factory:
   #     abc: debug
   def initialize(klass, config, stream_name = $stdout)
+    @config = config
     @logger = Logger.new(stream_name)
     @logger.progname = derive_progname(klass)
     @logger.level = :info
     plugin_loggers = config["plugin_loggers"]
-    @logger.level ||= plugin_loggers["PluginMetaLogger"] if plugin_loggers
+    @logger.level ||= plugin_loggers[@logger.progname] if plugin_loggers
     # puts "PluginLogger.initialize: @logger.progname=#{@logger.progname} set to #{@logger.level}".red
     @logger.formatter = proc { |severity, _, prog_name, msg|
       "#{severity} #{prog_name}: #{msg}\n"
@@ -106,7 +108,7 @@ class PluginLogger
     class_name = klass.class.to_s
     case class_name
     when "Class"
-      klass.class.name.demodulize
+      klass.class.name.split("::").last
     when "Module", "Symbol", "String"
       klass.to_s
     else
@@ -133,7 +135,8 @@ end
 #
 # @example
 #   # Create and initialize the meta-logger singleton in a high priority Jekyll `site` `:after_init` hook:
-#   PluginMetaLogger.instance.setup(site.config).info { "Meta-logger has been created" }
+#   @meta_logger = PluginMetaLogger.instance.new_logger(site.config, self)
+#   @meta_logger.info { "Meta-logger has been created" }
 #
 #   # In `config.yml`:
 #   plugin_loggers:
@@ -143,15 +146,15 @@ end
 #     ArchiveDisplayTag: debug
 #
 #   # In a Jekyll plugin:
-#   @logger = PluginMetaLogger.instance.new_logger(self)
+#   @logger = PluginMetaLogger.instance.setup(self)
 #   @logger.info { "This is a log message from a Jekyll plugin" }
 #   #
 #   PluginMetaLogger.instance.info { "MyPlugin vX.Y.Z has been loaded" }
 class PluginMetaLogger
   include Singleton
-  attr_reader :logger
+  attr_reader :config, :logger
 
-  def initialize
+  def initialize()
     super
     @config = nil
     @logger = new_logger(self)
@@ -173,25 +176,20 @@ class PluginMetaLogger
     @logger.error(self) { yield }
   end
 
-  def new_logger(klass, stream_name = $stdout)
+  def new_logger(klass, config = nil, stream_name = $stdout)
+    @config ||= config
     if @config.nil?
-      puts { "Error: PluginMetaLogger has not been initialized by calling setup yet.".red }
+      puts { "Error: PluginMetaLogger has not been initialized with site.config.".red }
       PluginLogger.new(klass, {}, stream_name)
     else
       PluginLogger.new(klass, @config, stream_name)
     end
   end
-
-  def setup(config, stream_name = $stdout)
-    @config = config
-    @logger = new_logger(self, stream_name)
-    @logger
-  end
 end
 
 Jekyll::Hooks.register(:site, :after_reset, :priority => :high) do |site|
   instance = PluginMetaLogger.instance
-  logger = instance.setup(site.config)
+  logger = instance.new_logger(site.config, PluginMetaLogger)
   logger.info { "Loaded #{JekyllPluginLoggerName::PLUGIN_NAME} v#{JekyllPluginLogger::VERSION} plugin." }
   logger.debug { "Logger for #{instance.progname} created at level #{instance.level_as_sym}" }
 end

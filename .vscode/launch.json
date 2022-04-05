@@ -41,7 +41,7 @@
       "request": "launch",
       "showDebuggerOutput": false,
       "type": "Ruby",
-      "useBundler": false,
+      "useBundler": true,
     }
   ]
 }
