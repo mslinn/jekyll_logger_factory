@@ -1,3 +1,6 @@
+## 2.1.1 / 2022-04-15
+  * Fixed progname reference for metalogger debug startup statement
+
 ## 2.1.0 / 2022-04-05
   * Changed how config info is made available
 

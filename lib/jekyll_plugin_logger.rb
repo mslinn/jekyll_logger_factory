@@ -152,7 +152,7 @@ class PluginMetaLogger
   include Singleton
   attr_reader :config, :logger
 
-  def initialize()
+  def initialize
     super
     @config = nil
     @logger = new_logger(self)
@@ -193,5 +193,5 @@ Jekyll::Hooks.register(:site, :after_reset, :priority => :high) do |site|
   instance = PluginMetaLogger.instance
   logger = instance.new_logger(PluginMetaLogger, site.config)
   logger.info { "Loaded #{JekyllPluginLoggerName::PLUGIN_NAME} v#{JekyllPluginLoggerVersion::VERSION} plugin." }
-  logger.debug { "Logger for #{instance.progname} created at level #{instance.level_as_sym}" }
+  logger.debug { "Logger for #{instance.logger.progname} created at level #{instance.level_as_sym}" }
 end
