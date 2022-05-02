@@ -13,22 +13,32 @@ will be read from the config file, if present.
 If the entry exists, its value overrides the value specified when created.
 If no such entry is found then the `log_level` value passed to `new` is used.
 
-Here are examples of how to use this plugin:
+Below is a high-level example of how to create and use this plugin.
+`site.config` is retrieved from `PluginMetaLogger.instance.config`;
+for some plugins, that information is provided as a `site` parameter.
+In that circumstance, `site.config` is a less verbose method of obtaining the same information.
+
 ```ruby
-# These log messages are always computed, needed or not:
-Jekyll.logger.info("Info message 1")
-Jekyll.logger.info('MyPlugin', "Info message 2")
+module MyPlugin1
+  @logger = PluginMetaLogger.instance.new_logger(self, PluginMetaLogger.instance.config)
 
-# The following blocks are not evaluated unless log_level requires them to be
+  def my_plugin_method(text, query)
+    @logger.debug { "text='#{text}' query='#{query}'" }
+    # TODO write the rest of the method
+  end
 
-Jekyll.logger.info('MyPlugin') { "Info message 3" }
-Jekyll.info { "Info message 4" }
+  # TODO write the rest of the plugin
+end
 
-Jekyll.logger.warn('MyPlugin') { "Warn message 1" }
-Jekyll.warn { "Warn message 2" }
+PluginMetaLogger.instance.info { "Loaded my_plugin_1 v0.1.0 plugin." }
+# Register MyPlugin1 here
+```
 
-Jekyll.logger.error('MyPlugin') { "Error message 1" }
-Jekyll.error { "Error message 2" }
+By default, the above causes output to appear on the console like this:
+
+```
+INFO PluginMetaLogger: Loaded my_plugin_1 v0.1.0 plugin.
+DEBUG MyPlugin1:  text='Hello world' query='Bogus query'
 ```
 
 For more information about the logging feature in the Ruby standard library,
