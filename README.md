@@ -19,6 +19,8 @@ for some plugins, that information is provided as a `site` parameter.
 In that circumstance, `site.config` is a less verbose method of obtaining the same information.
 
 ```ruby
+require "jekyll_plugin_logger"
+
 module MyPlugin1
   @logger = PluginMetaLogger.instance.new_logger(self, PluginMetaLogger.instance.config)
 
