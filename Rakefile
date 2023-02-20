@@ -1,14 +1,12 @@
-# frozen_string_literal: true
-
-require "bump/tasks"
-require "bundler/gem_tasks"
-require "rspec/core/rake_task"
+require 'bump/tasks'
+require 'bundler/gem_tasks'
+require 'rspec/core/rake_task'
 
 # do not always tag the version
 # Bump.tag_by_default = false
 
 # bump the version in additional files
-# Bump.replace_in_default = ["Readme.md"]
+# Bump.replace_in_default = ['Readme.md']
 
 # Maintain changelog:
 Bump.changelog = true
@@ -17,7 +15,7 @@ Bump.changelog = true
 Bump.changelog = :editor
 
 # Configure bump to not use a prefix:
-ENV["TAG_PREFIX"] = ""
+ENV['TAG_PREFIX'] = ''
 
 RSpec::Core::RakeTask.new(:spec)
-task :default => :spec
+task default: :spec

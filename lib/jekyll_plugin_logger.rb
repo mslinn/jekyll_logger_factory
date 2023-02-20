@@ -1,13 +1,11 @@
-# frozen_string_literal: true
-
-require "colorator"
-require "logger"
-require "singleton"
-require "yaml"
-require_relative "jekyll_plugin_logger/version"
+require 'colorator'
+require 'logger'
+require 'singleton'
+require 'yaml'
+require_relative 'jekyll_plugin_logger/version'
 
 module JekyllPluginLoggerName
-  PLUGIN_NAME = "jekyll_plugin_logger"
+  PLUGIN_NAME = 'jekyll_plugin_logger'.freeze
 end
 
 # Once the meta-logger is made (see `PluginMetaLogger`, below) new instances of `PluginLogger` can be created with log levels set
@@ -44,7 +42,7 @@ class PluginLogger
     @logger = Logger.new(stream_name)
     @logger.progname = derive_progname(klass)
     @logger.level = :info
-    plugin_loggers = config ? config["plugin_loggers"] : nil
+    plugin_loggers = config ? config['plugin_loggers'] : nil
     @logger.level = plugin_loggers[@logger.progname] if plugin_loggers && plugin_loggers[@logger.progname]
     # puts "PluginLogger.initialize: @logger.progname=#{@logger.progname} set to #{@logger.level}".red
     @logger.formatter = proc { |severity, _, prog_name, msg|
@@ -104,7 +102,7 @@ class PluginLogger
   def level_as_sym
     return :unknown if @logger.level.negative? || level > 4
 
-    [:debug, :info, :warn, :error, :fatal, :unknown][@logger.level]
+    %i[debug info warn error fatal unknown][@logger.level]
   end
 
   private
@@ -112,10 +110,8 @@ class PluginLogger
   def derive_progname(klass)
     class_name = klass.class.to_s
     case class_name
-    when "Class"
-      klass.to_s.split("::").last # class_name.name.split("::").last
-    when "Module", "Symbol", "String"
-      klass.to_s.split("::").last
+    when 'Class', 'Module', 'Symbol', 'String'
+      klass.to_s.split('::').last
     else
       class_name
     end
@@ -181,7 +177,7 @@ class PluginMetaLogger
   def new_logger(klass, config = nil, stream_name = $stdout)
     @config ||= config
     if @config.nil?
-      puts { "Error: PluginMetaLogger has not been initialized with site.config.".red }
+      puts { 'Error: PluginMetaLogger has not been initialized with site.config.'.red }
       PluginLogger.new(klass, {}, stream_name)
     else
       PluginLogger.new(klass, @config, stream_name)
@@ -189,7 +185,7 @@ class PluginMetaLogger
   end
 end
 
-Jekyll::Hooks.register(:site, :after_reset, :priority => :high) do |site|
+Jekyll::Hooks.register(:site, :after_reset, priority: :high) do |site|
   instance = PluginMetaLogger.instance
   logger = instance.new_logger(PluginMetaLogger, site.config)
   logger.info { "Loaded #{JekyllPluginLoggerName::PLUGIN_NAME} v#{JekyllPluginLoggerVersion::VERSION} plugin." }
