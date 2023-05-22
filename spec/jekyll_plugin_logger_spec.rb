@@ -17,15 +17,15 @@ require_relative '../lib/jekyll_plugin_logger'
 class MyTestPlugin
   instance = PluginMetaLogger.instance
   logger = instance.new_logger(self) # Should generate a warning
-  PluginMetaLogger.instance.info { 'How now, brown cow' }
+  PluginMetaLogger.instance.info  { 'How now, brown cow' }
   PluginMetaLogger.instance.debug { 'How now, brown cow' }
-  PluginMetaLogger.instance.warn { 'How now, brown cow' }
+  PluginMetaLogger.instance.warn  { 'How now, brown cow' }
   PluginMetaLogger.instance.error { 'How now, brown cow' }
 
   logger = PluginMetaLogger.instance.new_logger(self, RSpec.configuration.site_config)
   logger.debug { '3 fleas fleeing freedom' }
-  logger.info { '3 fleas fleeing freedom' }
-  logger.warn { '3 fleas fleeing freedom' }
+  logger.info  { '3 fleas fleeing freedom' }
+  logger.warn  { '3 fleas fleeing freedom' }
   logger.error { '3 fleas fleeing freedom' }
 
   def self.exercise(logger)

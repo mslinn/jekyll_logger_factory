@@ -39,10 +39,12 @@ class PluginLogger
   #     abc: debug
   def initialize(klass, config = nil, stream_name = $stdout)
     @config = config
-    @logger = Logger.new(stream_name)
-    @logger.progname = derive_progname(klass)
-    @logger.level = :info
+
     plugin_loggers = config ? config['plugin_loggers'] : nil
+
+    @logger = Logger.new stream_name
+    @logger.progname = derive_progname klass
+    @logger.level = :info
     @logger.level = plugin_loggers[@logger.progname] if plugin_loggers && plugin_loggers[@logger.progname]
     # puts "PluginLogger.initialize: @logger.progname=#{@logger.progname} set to #{@logger.level}".red
     @logger.formatter = proc { |severity, _, prog_name, msg|
@@ -154,24 +156,24 @@ class PluginMetaLogger
     @logger = new_logger(self)
   end
 
-  def info
-    @logger.info(self) { yield }
+  def info(&block)
+    @logger.info(self) { yield block }
   end
 
-  def debug
-    @logger.debug(self) { yield }
+  def debug(&block)
+    @logger.debug(self) { yield block }
   end
 
   def level_as_sym
     @logger.level_as_sym
   end
 
-  def warn
-    @logger.warn(self) { yield }
+  def warn(&block)
+    @logger.warn(self) { yield block }
   end
 
-  def error
-    @logger.error(self) { yield }
+  def error(&block)
+    @logger.error(self) { yield block }
   end
 
   def new_logger(klass, config = nil, stream_name = $stdout)

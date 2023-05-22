@@ -10,7 +10,7 @@ Gem::Specification.new do |spec| # rubocop:disable Metrics/BlockLength
   END_OF_DESC
   spec.email = ['mslinn@mslinn.com']
   spec.files = Dir['.rubocop.yml', 'LICENSE.*', 'Rakefile', '{lib,spec}/**/*', '*.gemspec', '*.md']
-  spec.homepage = 'https://www.mslinn.com/jekyll/4100-custom-logging-in-jekyll-plugins.html'
+  spec.homepage = 'https://www.mslinn.com/jekyll_plugins/jekyll_plugin_logger.html'
   spec.license = 'MIT'
   spec.metadata = {
     'allowed_push_host' => 'https://rubygems.org',

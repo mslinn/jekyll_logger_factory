@@ -33,8 +33,7 @@ Layout/InitialIndentation:
 
 Layout/HashAlignment:
   EnforcedColonStyle: table
-  Exclude:
-    - jekyll_plugin_logger.gemspec
+  EnforcedHashRocketStyle: table
 
 Layout/LineLength:
   Max: 150
