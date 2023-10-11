@@ -1,10 +1,10 @@
-source "https://rubygems.org"
+source 'https://rubygems.org'
 
 # Specify the gem's dependencies in jekyll_plugin_logger.gemspec
 gemspec
 
 group :test, :development do
-  gem 'debase', '0.2.5.beta2', require: false
+  gem 'debug', '>= 1.0.0', require: false
   gem 'rake', require: false
   gem 'rspec', require: false
   gem 'rubocop', require: false

@@ -3,8 +3,8 @@
 require 'fileutils'
 
 gemspec_name = 'jekyll_plugin_logger.gemspec'
-lines = File.readlines(gemspec_name, :chomp => true)
-if lines.find { |line| line.match?(%r!homepage *= *'TODO!) }
+lines = File.readlines(gemspec_name, chomp: true)
+if lines.find { |line| line.match?(/homepage *= *'TODO/) }
   abort <<~END_ERR
     Error: #{gemspec_name} must be edited and the TODO items replaced with information.
     Executing bin/run_this_first will perform some of the edits automatically.
@@ -13,6 +13,7 @@ end
 
 require 'bundler/setup'
 require gemspec_name.delete_suffix '.gemspec'
+require 'irb'
 
 # You can add fixtures and/or initialization code here to make experimenting
 # with your gem easier. You can also use a different console, if you like.
@@ -21,5 +22,4 @@ require gemspec_name.delete_suffix '.gemspec'
 # require 'pry'
 # Pry.start
 
-require 'irb'
 IRB.start(__FILE__)
