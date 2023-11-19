@@ -79,7 +79,7 @@ You can also run `bin/console` for an interactive prompt that will allow you to 
 To build and install this gem onto your local machine, run:
 
 ```shell
-$ rake install
+$ bundle exec rake install
 ```
 
 The following also does the same thing:
