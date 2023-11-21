@@ -1,5 +1,10 @@
 # Change Log
 
+## 2.1.2 / 2023-11-21
+
+* Added `demo`.
+* Added `fatal` and `unknown` log levels.
+
 
 ## 2.1.1 / 2022-04-15
 

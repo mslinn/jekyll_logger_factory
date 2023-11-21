@@ -1,0 +1,32 @@
+.debug, .error, .info, .fatal, .unknown {
+  font-family: Monaco,"Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
+  font-stretch: semi-condensed;
+}
+
+.debug {
+  color: magenta;
+}
+
+.error {
+  color: red;
+}
+
+.fatal {
+  background: lightyellow;
+  color: black;
+  padding: 2px;
+}
+
+.info {
+  color: blue;
+}
+
+.unknown {
+  background: black;
+  color: white;
+  padding: 2px;
+}
+
+.warn {
+  color: #ffcc00;
+}

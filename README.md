@@ -66,16 +66,32 @@ $ bundle
 The default log level is `info`.
 You can change the log level by editing `_config.yml` and adding a `plugin_loggers` section.
 Within that section, add an entry for the fully qualified name of your plugin class.
-For example, the [`demo`](demo/) contains a Jekyll plugin in [`demo/_plugins/`](demo/_plugins/)
-called [`demo_inline_tag.rb`](demo/_plugins/demo_inline_tag.rb).
+For example, the [`demo`](demo/) contains 2 Jekyll plugins in [`demo/_plugins/`](demo/_plugins/):
 
-This plugin&rsquo;s fully qualified class name is `Jekyll::InlineTag`.
-The log level can be set to `debug` with the following entry in `_config.yml`:
+* [`jekyll_support_inline_tag.rb`](demo/_plugins/jekyll_support_inline_tag.rb).
+* [`liquid_tag.rb`](demo/_plugins/liquid_tag.rb).
+
+These plugins&rsquo; fully qualified class names are `Raw::InlineTag` and `Support::InlineTag`, respectively.
+Their log levels can be set to `debug` with the following entries in `_config.yml`:
 
 ```yaml
 plugin_loggers:
-  Jekyll::InlineTag: debug
+  Raw::InlineTag: debug     # Notice the module name is specified as well as the class name
+  Support::InlineTag: debug # Notice the module name is specified as well as the class name
 ```
+
+
+## Run the Demo
+
+Run the demo by typing:
+
+```shell
+$ demo/_bin/debug -r
+```
+
+See what happens to the output when you edit the logging levels in the `plugin_loggers` section of `_config.yml`.
+You will have to restart the demo in order to see the output change.
+
 
 ## Additional Information
 

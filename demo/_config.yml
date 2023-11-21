@@ -31,8 +31,9 @@ plugin_loggers:
   PluginMetaLogger: info
   CleanHook: warn
   DocumentHooks: warn
+  PluginLogger: off
+  Raw::InlineTag: debug     # Notice the module name is specified as well as the class name
   Support::InlineTag: debug # Notice the module name is specified as well as the class name
-  Raw::InlineTag: debug # Notice the module name is specified as well as the class name
   PageHooks: warn
   PostHooks: warn
   SiteHooks: warn

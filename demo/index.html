@@ -4,15 +4,26 @@ layout: default
 title: Demonstrates two types of plugins
 ---
 <p>
-  The console should display similarly colored log output.
+  The console should display colored log output similar to what you see on this web page.
+  Notice that the output emitted by the two types of plugins is similar.
 </p>
-<table class="code table">
-  <tr>
-    <th>raw_inline_tag</th>
-    <th>jekyll_plugin_support_tag</th>
+<table class="table">
+  <tr class="code">
+    <th>liquid_tag</th>
+    <th>support_tag</th>
   </tr>
   <tr>
-    <td class="dark">{% raw_inline_tag %}</td>
-    <td class="dark">{% jekyll_plugin_support_tag %}</td>
+    <td>
+      This column shows the output from a traditional Jekyll inline tag plugin subclassed from
+      <a href="https://jekyllrb.com/docs/plugins/tags/"><code>Liquid::Tag</code></a>.
+    </td>
+    <td>
+      This column shows the output from an inline tag plugin subclassed from
+      <a href="https://www.mslinn.com/jekyll_plugins/jekyll_plugin_support.html"><code>JekyllSupport::JekyllTag</code></a>.
+    </td>
+  </tr>
+  <tr class="code">
+    <td class="dark">{% liquid_tag %}</td>
+    <td class="dark">{% support_tag %}</td>
   </tr>
 </table>

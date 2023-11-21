@@ -100,11 +100,27 @@ class PluginLogger
     end
   end
 
+  def fatal(progname = nil, &block)
+    if block
+      @logger.fatal(@logger.progname) { (yield block).to_s.green }
+    else
+      @logger.fatal(@logger.progname) { progname.to_s.green }
+    end
+  end
+
   # Available colors are: :black, :red, :green, :yellow, :blue, :magenta, :cyan, :white, and the modifier :bold
   def level_as_sym
     return :unknown if @logger.level.negative? || level > 4
 
     %i[debug info warn error fatal unknown][@logger.level]
+  end
+
+  def unknown(progname = nil, &block)
+    if block
+      @logger.unknown(@logger.progname) { (yield block).to_s }
+    else
+      @logger.unknown(@logger.progname) { progname.to_s }
+    end
   end
 
   private

@@ -24,7 +24,7 @@ code, pre, tt, .code, .codeLabel {
 }
 
 code, .code {
-  font-size: smaller;
+  font-size: 9pt;
 }
 
 h1.code, h2.code, h3.code {
@@ -42,8 +42,8 @@ h1, .h1 {
   margin-inline-end: 0px;
 }
 
-h1, h2, h3, header, nav#sidebar, .error {
-  font-family: "Helvetica Neue", Helvetica, Arial, serif;
+h1, h2, h3, header, nav#sidebar {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 header {
