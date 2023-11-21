@@ -44,6 +44,9 @@ Lint/RedundantCopDisableDirective:
   Exclude:
     - jekyll_plugin_logger.gemspec
 
+Metrics/AbcSize:
+  Max: 25
+
 Metrics/BlockLength:
   Exclude:
     - jekyll_plugin_logger.gemspec
@@ -52,6 +55,15 @@ Metrics/BlockLength:
 Metrics/ClassLength:
   Exclude:
     - spec/**/*
+
+Metrics/CyclomaticComplexity:
+  Max: 25
+
+Metrics/MethodLength:
+  Max: 25
+
+Metrics/PerceivedComplexity:
+  Max: 20
 
 Naming/FileName:
   Exclude:

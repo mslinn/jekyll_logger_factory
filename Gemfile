@@ -15,5 +15,6 @@ group :test, :development do
 end
 
 group :development do
+  gem 'pry'
   gem 'rspec-match_ignoring_whitespace'
 end
