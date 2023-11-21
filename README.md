@@ -25,7 +25,7 @@ The [`demo/_plugins/`](demo/_plugins/) directory demonstrates two ways of workin
 
 ## Installation
 
-Add the line to your Jekyll website's `_config.yml`:
+Add the following to your Jekyll website's `_config.yml`:
 
 ```ruby
 group :jekyll_plugins do
