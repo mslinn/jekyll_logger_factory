@@ -31,16 +31,16 @@ plugin_loggers:
   PluginMetaLogger: info
   CleanHook: warn
   DocumentHooks: warn
-  MyBlock: warn
+  Support::InlineTag: debug # Notice the module name is specified as well as the class name
+  Raw::InlineTag: debug # Notice the module name is specified as well as the class name
   PageHooks: warn
   PostHooks: warn
   SiteHooks: warn
 permalink: "/blog/:year/:month/:day/:title:output_ext"
 plugins: # Use file name of the plugin entry point, not the gem name
   - classifier-reborn
-  - jekyll
-  - jekyll_plugin_logger
   - html-proofer
+  - jekyll
   - jekyll_plugin_logger
 sass:
   style: compressed

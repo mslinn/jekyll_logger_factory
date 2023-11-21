@@ -1,8 +1,18 @@
 ---
 description: jekyll_plugin_logger demonstration.
 layout: default
-title: Exercising Parameter Combinations
+title: Demonstrates two types of plugins
 ---
-<h2 id="tag_badge" class='code'>jekyll_plugin_logger</h2>
-<h3 id="demo_inline_tag" class="code">demo_inline_tag</h3>
-{% demo_inline_tag %}
+<p>
+  The console should display similarly colored log output.
+</p>
+<table class="code table">
+  <tr>
+    <th>raw_inline_tag</th>
+    <th>jekyll_plugin_support_tag</th>
+  </tr>
+  <tr>
+    <td class="dark">{% raw_inline_tag %}</td>
+    <td class="dark">{% jekyll_plugin_support_tag %}</td>
+  </tr>
+</table>

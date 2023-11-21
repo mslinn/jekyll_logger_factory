@@ -5,11 +5,10 @@
 
 ## Usage
 
-It looks within `_config.yml` for a key corresponding to the plugin progname.
-For example, if the plugin's class is called `"MyPlugin"` then an entry called `plugin_loggers.MyPlugin`
-will be read from the config file, if present.
+`jekyll_plugin_logger` looks within `_config.yml` for a key corresponding to the
+fully qualified name of the plugin class.
 If the entry exists, its value overrides the value specified when created.
-If no such entry is found then the `log_level` value passed to `new` is used.
+If no such entry is found, then the `log_level` value passed to `new` is used.
 
 Below is a high-level example of how to create and use this plugin.
 `site.config` is retrieved from `PluginMetaLogger.instance.config`;
@@ -62,10 +61,26 @@ $ bundle
 ```
 
 
+## Configuration
+
+The default log level is `info`.
+You can change the log level by editing `_config.yml` and adding a `plugin_loggers` section.
+Within that section, add an entry for the fully qualified name of your plugin class.
+For example, the [`demo`](demo/) contains a Jekyll plugin in [`demo/_plugins/`](demo/_plugins/)
+called [`demo_inline_tag.rb`](demo/_plugins/demo_inline_tag.rb).
+
+This plugin&rsquo;s fully qualified class name is `Jekyll::InlineTag`.
+The log level can be set to `debug` with the following entry in `_config.yml`:
+
+```yaml
+plugin_loggers:
+  Jekyll::InlineTag: debug
+```
+
 ## Additional Information
 
 More information is available on Mike Slinn's web site about
-[Jekyll plugins](https://www.mslinn.com/blog/index.html#Jekyll).
+[Jekyll plugins](https://www.mslinn.com/jekyll/10100-custom-logging-in-jekyll-plugins.html).
 
 
 ## Development
