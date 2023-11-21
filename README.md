@@ -25,7 +25,9 @@ The [`demo/_plugins/`](demo/_plugins/) directory demonstrates two ways of workin
 
 ## Installation
 
-Add the following to your Jekyll website's `_config.yml`:
+### To A Jekyll Website
+
+Add the following to your Jekyll website's `Gemfile`:
 
 ```ruby
 group :jekyll_plugins do
@@ -34,6 +36,22 @@ end
 ```
 
 Install all of the dependent gems of your Jekyll website by typing:
+
+```shell
+$ bundle
+```
+
+### To A Jekyll Plugin Packaged As A Gem
+
+Add the following to your Gem&rsquo;s `.gemspec`:
+
+```ruby
+Gem::Specification.new do |spec|
+  spec.add_dependency 'jekyll_plugin_logger'
+end
+```
+
+Install all of the dependent gems of your Gem by typing:
 
 ```shell
 $ bundle
