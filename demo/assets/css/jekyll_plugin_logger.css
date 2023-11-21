@@ -1,5 +1,6 @@
 .level_debug, .level_error, .level_fatal, .level_info, .level_unknown, .level_warn {
   font-family: Monaco,"Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
+  font-size: 11pt;
   font-stretch: semi-condensed;
   padding: 2px;
 }
