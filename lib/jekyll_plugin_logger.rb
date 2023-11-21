@@ -30,6 +30,13 @@ class PluginLogger
   #   (`debug`, `info`, `warn`, `error`, or `DEBUG`, `INFO`, `WARN`, `ERROR`),
   #   or as a symbol (`:debug`, `:info`, `:warn`, `:error` ).
   #
+  # 0: debug
+  # 1: info
+  # 2: warn
+  # 3: error
+  # 4: fatal
+  # 5: unknown
+  #
   # @param config [YAML] is normally created by reading a YAML file such as Jekyll's `_config.yml`.
   #   When invoking from a Jekyll plugin, provide `site.config`,
   #   which is available from all types of Jekyll plugins as `Jekyll.configuration({})`.
@@ -39,16 +46,15 @@ class PluginLogger
   #     abc: debug
   def initialize(klass, config = nil, stream_name = $stdout)
     @config = config
-
-    plugin_loggers = config ? config['plugin_loggers'] : nil
+    plugin_loggers = config&.[] 'plugin_loggers'
 
     @logger = Logger.new stream_name
     @logger.progname = derive_progname klass
     @logger.level = :info
-    @logger.level = plugin_loggers[@logger.progname] if plugin_loggers && plugin_loggers[@logger.progname]
+    @logger.level = plugin_loggers[@logger.progname] if plugin_loggers&.[] @logger.progname
     # puts "PluginLogger.initialize: @logger.progname=#{@logger.progname} set to #{@logger.level}".red
-    @logger.formatter = proc { |severity, _, prog_name, msg|
-      "#{severity} #{prog_name}: #{msg}\n"
+    @logger.formatter = proc { |severity, _datetime, progname, msg|
+      "#{severity} #{progname}: #{msg}\n"
     }
   end
 
@@ -72,6 +78,7 @@ class PluginLogger
     @logger.level = value
   end
 
+  # @return the log level specified in _config.yml, or :info (1) if not specified
   def level
     @logger.level
   end
@@ -108,6 +115,7 @@ class PluginLogger
     end
   end
 
+  # @return the log level specified in _config.yml, or :info (1) if not specified
   # Available colors are: :black, :red, :green, :yellow, :blue, :magenta, :cyan, :white, and the modifier :bold
   def level_as_sym
     return :unknown if @logger.level.negative? || level > 4

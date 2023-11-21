@@ -27,7 +27,7 @@ Gem::Specification.new do |spec| # rubocop:disable Metrics/BlockLength
   END_MESSAGE
   spec.require_paths = ['lib']
   spec.required_ruby_version = '>= 2.6.0'
-  spec.summary = 'Generates Jekyll logger with colored output.'
+  spec.summary = 'Generates a Jekyll logger with colored output.'
   spec.test_files = spec.files.grep(%r{^(test|spec|features)/})
   spec.version = JekyllPluginLoggerVersion::VERSION
 

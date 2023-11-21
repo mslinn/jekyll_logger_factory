@@ -135,7 +135,7 @@ jekyll_plugin_logger (1.0.0)
     License: MIT
     Installed at: /home/mslinn/.gems
 
-    Generates Jekyll logger with colored output.
+    Generates a Jekyll logger with colored output.
 ```
 
 

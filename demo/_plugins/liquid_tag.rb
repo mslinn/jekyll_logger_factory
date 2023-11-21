@@ -14,27 +14,27 @@ module Raw
 
     def render(_context)
       @logger.debug do
-        @msg_debug = "<div class='debug'>#{NAME}: Debug level message (#{@logger.level}).</div>"
+        @msg_debug = "<div class='debug'>#{NAME}: Debug level message.</div>"
         remove_html_tags @msg_debug
       end
       @logger.info do
-        @msg_info = "<div class='info'>#{NAME}: Info level message (#{@logger.level}).</div>"
+        @msg_info = "<div class='info'>#{NAME}: Info level message.</div>"
         remove_html_tags @msg_info
       end
       @logger.warn do
-        @msg_warn = "<div class='warn'>#{NAME}: Warn level message (#{@logger.level}).</div>"
+        @msg_warn = "<div class='warn'>#{NAME}: Warn level message.</div>"
         remove_html_tags @msg_warn
       end
       @logger.error do
-        @msg_error = "<div class='error'>#{NAME}: Error level message (#{@logger.level}).</div>"
+        @msg_error = "<div class='error'>#{NAME}: Error level message.</div>"
         remove_html_tags @msg_error
       end
       @logger.fatal do
-        @msg_fatal = "<div class='fatal'>#{NAME}: Fatal level message (#{@logger.level}).</div>"
+        @msg_fatal = "<div class='fatal'>#{NAME}: Fatal level message.</div>"
         remove_html_tags @msg_error
       end
       @logger.unknown do
-        @msg_unknown = "<div class='unknown'>#{NAME}: Unknown level message (#{@logger.level}).</div>"
+        @msg_unknown = "<div class='unknown'>#{NAME}: Unknown level message.</div>"
         remove_html_tags @msg_error
       end
 
