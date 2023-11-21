@@ -1,52 +1,31 @@
 # `jekyll_plugin_logger` [![Gem Version](https://badge.fury.io/rb/jekyll_plugin_logger.svg)](https://badge.fury.io/rb/jekyll_plugin_logger)
 
 `jekyll_plugin_logger` is a Jekyll plugin, packaged as a Ruby gem, that provides colored console logs for Jekyll plugins.
+It is based on the standard Ruby [`Logger`](https://ruby-doc.org/stdlib-3.1.0/libdoc/logger/rdoc/Logger.html) class.
+
+Log levels are normally set from `_config.yml`:
+
+* 0: `debug`
+* 1: `info`
+* 2: `warn`
+* 3: `error`
+* 4: `fatal`
+* 5: `unknown` (displays as `ANY`)
 
 
 ## Usage
 
-`jekyll_plugin_logger` looks within `_config.yml` for a key corresponding to the
-fully qualified name of the plugin class.
-If the entry exists, its value overrides the value specified when created.
-If no such entry is found, then the `log_level` value passed to `new` is used.
+The [`demo/_plugins/`](demo/_plugins/) directory demonstrates two ways of working with `jekyll_plugin_logger`:
 
-Below is a high-level example of how to create and use this plugin.
-`site.config` is retrieved from `PluginMetaLogger.instance.config`;
-for some plugins, that information is provided as a `site` parameter.
-In that circumstance, `site.config` is a less verbose method of obtaining the same information.
-
-```ruby
-require "jekyll_plugin_logger"
-
-module MyPlugin1
-  @logger = PluginMetaLogger.instance.new_logger(self, PluginMetaLogger.instance.config)
-
-  def my_plugin_method(text, query)
-    @logger.debug { "text='#{text}' query='#{query}'" }
-    # TODO write the rest of the method
-  end
-
-  # TODO write the rest of the plugin
-end
-
-PluginMetaLogger.instance.info { "Loaded my_plugin_1 v0.1.0 plugin." }
-# Register MyPlugin1 here
-```
-
-By default, the above causes output to appear on the console like this:
-
-```text
-INFO PluginMetaLogger: Loaded my_plugin_1 v0.1.0 plugin.
-DEBUG MyPlugin1:  text='Hello world' query='Bogus query'
-```
-
-For more information about the logging feature in the Ruby standard library,
-see https://ruby-doc.org/stdlib-2.7.2/libdoc/logger/rdoc/Logger.html
+* `liquid_tag.rb`, a Jekyll plugin subclassed from
+  [`Liquid::Tag`](https://jekyllrb.com/docs/plugins/tags/).
+* `support_tag.rb`, a Jekyll plugin subclassed from
+  [`JekyllSupport::JekyllTag`](https://www.mslinn.com/jekyll_plugins/jekyll_plugin_support.html).
 
 
 ## Installation
 
-Add this line to your Jekyll website's `_config.yml`:
+Add the line to your Jekyll website's `_config.yml`:
 
 ```ruby
 group :jekyll_plugins do
@@ -66,13 +45,10 @@ $ bundle
 The default log level is `info`.
 You can change the log level by editing `_config.yml` and adding a `plugin_loggers` section.
 Within that section, add an entry for the fully qualified name of your plugin class.
-For example, the [`demo`](demo/) contains 2 Jekyll plugins in [`demo/_plugins/`](demo/_plugins/):
 
-* [`jekyll_support_inline_tag.rb`](demo/_plugins/jekyll_support_inline_tag.rb).
-* [`liquid_tag.rb`](demo/_plugins/liquid_tag.rb).
-
-These plugins&rsquo; fully qualified class names are `Raw::InlineTag` and `Support::InlineTag`, respectively.
-Their log levels can be set to `debug` with the following entries in `_config.yml`:
+For example, the fully qualified class names of the Jekyll plugins provided in `demo/_plugins/`
+are `Raw::InlineTag` and `Support::InlineTag`, respectively.
+Their log levels can be set to `debug` with the following entries in [`_config.yml`](demo/_config.yml):
 
 ```yaml
 plugin_loggers:
@@ -90,7 +66,8 @@ $ demo/_bin/debug -r
 ```
 
 See what happens to the output when you edit the logging levels in the `plugin_loggers` section of `_config.yml`.
-You will have to restart the demo in order to see the output change.
+You will have to restart the demo after each modification to `_config.yml`
+in order to see the output change.
 
 
 ## Additional Information
@@ -101,19 +78,16 @@ More information is available on Mike Slinn's web site about
 
 ## Development
 
-After checking out the repo, run `bin/setup` to install dependencies, including development dependencies.
+After checking out the `jekyll_plugin_logger` repository,
+run `bin/setup` to install dependencies,
+which includes development dependencies.
 
-You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+You can then run `bin/console` for an interactive prompt that will allow you to experiment.
+
 
 ### Build and Install Locally
 
 To build and install this gem onto your local machine, run:
-
-```shell
-$ bundle exec rake install
-```
-
-The following also does the same thing:
 
 ```shell
 $ bundle exec rake install

@@ -35,7 +35,7 @@ class PluginLogger
   # 2: warn
   # 3: error
   # 4: fatal
-  # 5: unknown
+  # 5: unknown (displays as ANY)
   #
   # @param config [YAML] is normally created by reading a YAML file such as Jekyll's `_config.yml`.
   #   When invoking from a Jekyll plugin, provide `site.config`,

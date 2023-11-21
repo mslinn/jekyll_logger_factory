@@ -14,6 +14,7 @@
 ## 2.1.0 / 2022-04-05
 
 * Changed how config info is made available.
+* `PluginLogger` is a class once again.
 
 
 ## 2.0.1 / 2022-04-05
