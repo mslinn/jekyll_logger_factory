@@ -109,9 +109,9 @@ class PluginLogger
 
   def fatal(progname = nil, &block)
     if block
-      @logger.fatal(@logger.progname) { (yield block).to_s.green }
+      @logger.fatal(@logger.progname) { (yield block).to_s.red.bold }
     else
-      @logger.fatal(@logger.progname) { progname.to_s.green }
+      @logger.fatal(@logger.progname) { progname.to_s.red.bold }
     end
   end
 
@@ -125,9 +125,9 @@ class PluginLogger
 
   def unknown(progname = nil, &block)
     if block
-      @logger.unknown(@logger.progname) { (yield block).to_s }
+      @logger.unknown(@logger.progname) { (yield block).to_s.green }
     else
-      @logger.unknown(@logger.progname) { progname.to_s }
+      @logger.unknown(@logger.progname) { progname.to_s.green }
     end
   end
 

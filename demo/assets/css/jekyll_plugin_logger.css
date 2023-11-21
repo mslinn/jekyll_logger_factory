@@ -1,31 +1,31 @@
-.debug, .error, .fatal, .info, .unknown, .warn {
+.level_debug, .level_error, .level_fatal, .level_info, .level_unknown, .level_warn {
   font-family: Monaco,"Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
   font-stretch: semi-condensed;
   padding: 2px;
 }
 
-.debug {
+.level_debug {
   color: magenta;
 }
 
-.error {
+.level_error {
   color: red;
 }
 
-.fatal {
-  background: lightyellow;
-  color: black;
-}
-
-.info {
-  color: rgb(133, 186, 246);
-}
-
-.unknown {
-  background: black;
+.level_fatal {
+  background: red;
   color: white;
 }
 
-.warn {
-  color: #ffcc00;
+.level_info {
+  color: cyan;
+}
+
+.level_unknown {
+  background: rgb(255, 255, 119);
+  color: darkgreen;
+}
+
+.level_warn {
+  color: yellow;
 }
