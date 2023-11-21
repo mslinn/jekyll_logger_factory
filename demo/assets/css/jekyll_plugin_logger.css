@@ -1,6 +1,7 @@
-.debug, .error, .info, .fatal, .unknown {
+.debug, .error, .fatal, .info, .unknown, .warn {
   font-family: Monaco,"Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
   font-stretch: semi-condensed;
+  padding: 2px;
 }
 
 .debug {
@@ -14,7 +15,6 @@
 .fatal {
   background: lightyellow;
   color: black;
-  padding: 2px;
 }
 
 .info {
@@ -24,7 +24,6 @@
 .unknown {
   background: black;
   color: white;
-  padding: 2px;
 }
 
 .warn {
