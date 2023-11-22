@@ -31,11 +31,11 @@ module Raw
       end
       @logger.fatal do
         @msg_fatal = "<div class='level_fatal'>#{NAME}: Fatal level message.</div>"
-        remove_html_tags @msg_error
+        remove_html_tags @msg_fatal
       end
       @logger.unknown do
         @msg_unknown = "<div class='level_unknown'>#{NAME}: Unknown level message.</div>"
-        remove_html_tags @msg_error
+        remove_html_tags @msg_unknown
       end
 
       "#{@msg_debug}#{@msg_info}#{@msg_warn}#{@msg_error}#{@msg_fatal}#{@msg_unknown}"
