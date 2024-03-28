@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.1.3 / 2024-03-28
+
+* Improved comments.
+* Improved PluginMetaLogger.new_logger debug output.
+
+
 ## 2.1.2 / 2023-11-21
 
 * Added `demo`.

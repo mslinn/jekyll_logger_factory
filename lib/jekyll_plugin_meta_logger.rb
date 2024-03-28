@@ -58,13 +58,16 @@ class PluginMetaLogger
     @logger.error(self) { yield block }
   end
 
+  # By the time this method is called, `PluginMetaLogger.instance.config` contains the entire contents of `_config.yml`
   def new_logger(klass, config = nil, stream_name = $stdout)
     @config ||= config
     if @config.nil?
-      puts { 'Error: PluginMetaLogger has not been initialized with site.config.'.red }
-      PluginLogger.new(klass, {}, stream_name)
+      logger = PluginLogger.new(klass, {}, stream_name)
+      logger.debug { 'PluginMetaLogger was not initialized from site.config.' }
     else
-      PluginLogger.new(klass, @config, stream_name)
+      logger = PluginLogger.new(klass, @config, stream_name)
+      logger.debug { 'PluginMetaLogger was initialized from site.config.' }
     end
+    logger
   end
 end

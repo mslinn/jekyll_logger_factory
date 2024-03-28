@@ -10,13 +10,16 @@ end
 
 # Once the meta-logger is made (see `PluginMetaLogger`, below) new instances of `PluginLogger` can be created with log levels set
 # by `config` entries.
+#
 # @example Create new `PluginLogger`s like this:
-#   @logger = PluginMetaLogger.instance.new_logger(self, PluginMetaLogger.instance.config)
+#   @logger = PluginMetaLogger.instance.new_logger(ref, PluginMetaLogger.instance.config)
 #
-# self can be a module, a class, a string, or a symbol.
+# ref can be a module name, a class name, a string, or a symbol.
 #
+# Logger usage:
 # Best practice is to invoke `info`, `warn, `debug` and `error` methods by passing blocks that contain the message.
 # The blocks will only be evaluated if output for that level is enabled.
+#
 # @example Use `PluginLogger`s like this:
 #   @logger.info { "This is only evaluated if info level debugging is enabled" }
 #
@@ -24,24 +27,12 @@ end
 # @see https://ruby-doc.org/stdlib-2.7.1/libdoc/logger/rdoc/Logger.html
 class PluginLogger
   # This method should only be called by PluginMetaLogger
-  # @param log_level [String, Symbol, Integer] can be specified as $stderr or $stdout,
-  #   or an integer from 0..3 (inclusive),
-  #   or as a case-insensitive string
-  #   (`debug`, `info`, `warn`, `error`, or `DEBUG`, `INFO`, `WARN`, `ERROR`),
-  #   or as a symbol (`:debug`, `:info`, `:warn`, `:error` ).
+  # @param stream_name [String, Symbol, Integer] can be specified as $stderr or $stdout
   #
-  # 0: debug
-  # 1: info
-  # 2: warn
-  # 3: error
-  # 4: fatal
-  # 5: unknown (displays as ANY)
+  # @param config [YAML] can accept configuration data, usually a reference to `site.config`,
+  # stored in `PluginMetaLogger.instance.config`.
   #
-  # @param config [YAML] is normally created by reading a YAML file such as Jekyll's `_config.yml`.
-  #   When invoking from a Jekyll plugin, provide `site.config`,
-  #   which is available from all types of Jekyll plugins as `Jekyll.configuration({})`.
-  #
-  # @example  If `progname` has value `abc`, then the YAML to override the programmatically set log_level to `debug` is:
+  # @example  If `klass` has value `abc`, then the YAML to override the programmatically set log_level to `debug` is:
   #   logger_factory:
   #     abc: debug
   def initialize(klass, config = nil, stream_name = $stdout)
@@ -74,6 +65,17 @@ class PluginLogger
     end
   end
 
+  # @param value [String, Symbol, Integer] can be an integer from 0..3 (inclusive),
+  #   or a case-insensitive string
+  #   (`debug`, `info`, `warn`, `error`, or `DEBUG`, `INFO`, `WARN`, `ERROR`),
+  #   or a symbol (`:debug`, `:info`, `:warn`, `:error` ).
+  #
+  # 0: debug
+  # 1: info
+  # 2: warn
+  # 3: error
+  # 4: fatal
+  # 5: unknown (displays as ANY)
   def level=(value)
     @logger.level = value
   end
@@ -144,6 +146,10 @@ class PluginLogger
   end
 end
 
+# When Jekyll first starts, this code reads the contents of `_config.yml` that was stored in `site.config`,
+# and stores a reference to the configuration information in `PluginMetaLogger.instance.config` for when loggers are
+# created in the future.
+# The `site.config` information is used by `PluginLogger.initialize` to automatically configure new loggers.
 Jekyll::Hooks.register(:site, :after_reset, priority: :high) do |site|
   instance = PluginMetaLogger.instance
   logger = instance.new_logger(PluginMetaLogger, site.config)
